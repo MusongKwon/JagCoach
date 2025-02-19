@@ -22,11 +22,8 @@
         .file-frame {
             margin-top: 20px;
         }
-        .file-input {
-            padding: 10px;
-            width: 300px;
-            background-color: grey;
-            color: black;
+        .hidden-file-input {
+            display: none; /* Hide default file input */
         }
         .file-button {
             padding: 10px 20px;
@@ -34,6 +31,7 @@
             color: #800000;
             font-weight: bold;
             cursor: pointer;
+            border: 2px solid #800000;
         }
         .file-button:hover {
             background-color: #800000;
@@ -53,11 +51,13 @@
     <h2>Please choose an MP4 video presentation from your files to analyze. ☺</h2>
 
     <div class="file-frame">
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="video_file" class="file-input" accept=".mp4, .avi, .mkv, .mov, .flv, .wmv">
-            <br><br>
-            <button type="submit" class="file-button">Browse Files</button>
-        </form>
+        <!-- Hidden file input -->
+        <input type="file" id="fileInput" class="hidden-file-input" accept=".mp4, .avi, .mkv, .mov, .flv, .wmv">
+        
+        <!-- Custom file selection button -->
+        <button class="file-button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+        
+        <p id="fileName" style="color: white; margin-top: 10px;"></p>
     </div>
 
     {% if message %}
@@ -70,5 +70,12 @@
     <div id="img">
         <img src="static/jaguar-head.png" alt="Jaguar Logo" width="100" height="100">
     </div>
+
+    <script>
+        document.getElementById("fileInput").addEventListener("change", function() {
+            const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
+            document.getElementById("fileName").textContent = "Selected file: " + fileName;
+        });
+    </script>
 </body>
 </html>
