@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JagCoach</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #800000;
+            font-family: 'Comic Sans MS', sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 36px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            font-size: 24px;
+        }
+        .file-frame {
+            margin-top: 20px;
+        }
+        .file-input {
+            padding: 10px;
+            width: 300px;
+            background-color: grey;
+            color: black;
+        }
+        .file-button {
+            padding: 10px 20px;
+            background-color: black;
+            color: #800000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .file-button:hover {
+            background-color: #800000;
+            color: white;
+        }
+        .upload-message {
+            margin-top: 20px;
+            color: white;
+        }
+        #img {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to JagCoach!</h1>
+    <h2>Please choose an MP4 video presentation from your files to analyze. ☺</h2>
+
+    <div class="file-frame">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="video_file" class="file-input" accept=".mp4, .avi, .mkv, .mov, .flv, .wmv">
+            <br><br>
+            <button type="submit" class="file-button">Browse Files</button>
+        </form>
+    </div>
+
+    {% if message %}
+        <div class="upload-message">
+            <p>{{ message }}</p>
+            <p>File saved at: {{ file_path }}</p>
+        </div>
+    {% endif %}
+
+    <div id="img">
+        <img src="static/jaguar-head.png" alt="Jaguar Logo" width="100" height="100">
+    </div>
+</body>
+</html>
