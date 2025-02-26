@@ -50,15 +50,21 @@
     <h1>Welcome to JagCoach!</h1>
     <h2>Please choose an MP4 video presentation from your files to analyze. ☺</h2>
 
-    <div class="file-frame">
-        <!-- Hidden file input -->
-        <input type="file" id="fileInput" class="hidden-file-input" accept=".mp4, .avi, .mkv, .mov, .flv, .wmv">
-        
-        <!-- Custom file selection button -->
-        <button class="file-button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
-        
-        <p id="fileName" style="color: white; margin-top: 10px;"></p>
-    </div>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="file-frame">
+            <!-- Hidden file input -->
+            <input type="file" id="fileInput" name="video_file" class="hidden-file-input" accept=".mp4, .avi, .mkv, .mov, .flv, .wmv">
+
+            <!-- Custom file selection button -->
+            <button type="button" class="file-button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+
+            <!-- Display selected file name -->
+            <p id="fileName" style="color: white; margin-top: 10px;"></p>
+
+            <!-- Submit button to send the file -->
+            <button type="submit" class="file-button">Upload</button>
+        </div>
+    </form>
 
     {% if message %}
         <div class="upload-message">
@@ -73,9 +79,27 @@
 
     <script>
         document.getElementById("fileInput").addEventListener("change", function() {
-            const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
-            document.getElementById("fileName").textContent = "Selected file: " + fileName;
+            const file = this.files[0]
+            document.getElementById("fileName").textContent = "Selected file: " + file.name;
+
+            const fileURL = URL.createObjectURL(file); // Create a temporary URL for the file
+            const vElement = document.getElementById("vPlayback"); // Get the video element
+            const sElement = vElement.querySelector("source"); // Get the <source> tag inside <video>
+
+            sElement.src = fileURL; // New video source
+            vElement.load(); // Reload the video to reflect the new source
+
         });
     </script>
-</body>
+
+    <script>
+    document.getElementById("fileInput").addEventListener("change", function() {
+        const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
+        document.getElementById("fileName").textContent = "Selected file: " + fileName;
+    });
+    </script>
+    <video id="vPlayback" width="320" height="240" controls>
+            <source src="" type="video/mp4">
+        </video>
+    </body>
 </html>
