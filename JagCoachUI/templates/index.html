@@ -73,9 +73,22 @@
 
     <script>
         document.getElementById("fileInput").addEventListener("change", function() {
-            const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
-            document.getElementById("fileName").textContent = "Selected file: " + fileName;
+            const file = this.files[0]
+            document.getElementById("fileName").textContent = "Selected file: " + file.name;
+
+            const fileURL = URL.createObjectURL(file); // Create a temporary URL for the file
+            const vElement = document.getElementById("vPlayback"); // Get the video element
+            const sElement = vElement.querySelector("source"); // Get the <source> tag inside <video>
+
+            sElement.src = fileURL; // New video source
+            vElement.load(); // Reload the video to reflect the new source
+
         });
     </script>
+
+    <video id="vPlayback" width="320" height="240" controls>
+        <source src="" type="video/mp4">
+    </video>
+
 </body>
 </html>
