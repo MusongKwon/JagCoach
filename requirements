@@ -1,0 +1,13 @@
+Flask==3.1.0
+pydub==0.25.1
+ffmpeg-python==0.2.0
+imageio-ffmpeg==0.4.8
+
+# System dependency (must install separately)
+# Install ffmpeg manually:
+# macOS: brew install ffmpeg
+# Linux: sudo apt install ffmpeg
+# Windows: choco install ffmpeg
+
+# Install all dependencies:
+# pip install -r requirements.txt

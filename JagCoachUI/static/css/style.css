@@ -1,0 +1,47 @@
+body {
+    background-color: #1a1a1a;
+    color: #800000;
+    font-family: 'Comic Sans MS', sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 24px;
+}
+
+.file-frame {
+    margin-top: 20px;
+}
+
+.hidden-file-input {
+    display: none; /* Hide default file input */
+}
+
+.file-button {
+    padding: 10px 20px;
+    background-color: black;
+    color: #800000;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #800000;
+}
+
+.file-button:hover {
+    background-color: #800000;
+    color: white;
+}
+
+.upload-message {
+    margin-top: 20px;
+    color: white;
+}
+
+#img {
+    margin-top: 40px;
+}

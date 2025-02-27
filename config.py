@@ -1,0 +1,19 @@
+import os
+
+
+class Config:
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "supersecretkey"
+    UPLOAD_FOLDER = "uploads"
+    MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB file upload limit
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+# Default config
+config = DevelopmentConfig
