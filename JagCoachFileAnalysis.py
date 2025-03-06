@@ -54,107 +54,6 @@ def get_elements(file_path):
         f.write(output_capture.getvalue())
 
     return output_txt
-
-def get_pauses(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-
-            # Search for the line with "number_of_pauses="
-            if "number_of_pauses= " in content:
-                # Extract the value after "number_of_pauses="
-                start_index = content.find("number_of_pauses= ") + len("number_of_pauses= ")
-                pause_value = content[start_index:].split()[0]  # Get the number and split in case there are other words
-
-                # Convert to float (double in Python)
-                return float(pause_value)
-            else:
-                raise ValueError("The 'number_of_pauses' value not found in the file.")
-    
-    except Exception as e:
-        print(f"Error while extracting pauses: {e}")
-        return None
-
-def get_mood(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-
-            # Search for the line with "mood="
-            if "mood of speech: " in content:
-                start_index = content.find("mood of speech: ") + len("mood of speech: ")
-                end_index = content.find(",", start_index)
-                mood = content[start_index:end_index].strip()
-                if mood == "Showing no emotion":
-                    mood_value = 1.0
-                elif mood == "Reading":
-                    mood_value = 2.0
-                else:
-                    mood_value = 3.0
-                return mood_value
-            else:
-                raise ValueError("The 'mood' value not found in the file.")
-    
-    except Exception as e:
-        print(f"Error while extracting mood: {e}")
-        return None
-    
-def get_pronunciation_score(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-
-            if "Pronunciation_posteriori_probability_score_percentage= :" in content:
-                start_index = content.find("Pronunciation_posteriori_probability_score_percentage= :") + len("Pronunciation_posteriori_probability_score_percentage= :")
-                pronunciation_score = content[start_index:].split()[0]
-                return float(pronunciation_score)
-            else:
-                raise ValueError("The 'pronunciation_score' value not found in the file.")
-    except Exception as e:
-        print(f"Error while extracting pronunciation score: {e}")
-        return None
-
-def get_speech_rate(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-            if "rate_of_speech= " in content:
-                start_index = content.find("rate_of_speech= ") + len("rate_of_speech= ")
-                speech_rate = content[start_index:].split()[0]
-                return float(speech_rate)
-    except Exception as e:
-        print(f"Error while extracting speech rate: {e}")
-        return None
-
-def get_articulation_rate(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-            if "articulation_rate= " in content:
-                start_index = content.find("articulation_rate= ") + len("articulation_rate= ")
-                articulation_rate = content[start_index:].split()[0]
-                return float(articulation_rate)
-    except Exception as e:
-        print(f"Error while extracting articulation rate: {e}")
-        return None
-
-def get_speaking_ratio(txt_file_path):
-    try:
-        with open(txt_file_path, 'r') as file:
-            # Read the file content
-            content = file.read()
-            if "balance= " in content:
-                start_index = content.find("balance= ") + len("balance= ")
-                speaking_ratio = content[start_index:].split()[0]
-                return float(speaking_ratio)
-    except Exception as e:
-        print(f"Error while extracting speaking ratio: {e}")
-        return None
     
 def get_elements_dictionary(txt_file_path):
     # Initialize the dictionary with default values
@@ -169,13 +68,42 @@ def get_elements_dictionary(txt_file_path):
 
     # Fill in the dictionary with extracted values
     try:
-        elements_dictionary["mood"] = get_mood(txt_file_path)
-        elements_dictionary["pronunciation score"] = get_pronunciation_score(txt_file_path)
-        elements_dictionary["speech rate"] = get_speech_rate(txt_file_path)
-        elements_dictionary["articulation rate"] = get_articulation_rate(txt_file_path)
-        elements_dictionary["speaking ratio"] = get_speaking_ratio(txt_file_path)
-        elements_dictionary["number of pauses"] = get_pauses(txt_file_path)
+        with open(txt_file_path, 'r') as file:
+            # Read the file content
+            content = file.read()
 
+            # Search for the line with "mood="
+            if "mood of speech: " in content:
+                start_index = content.find("mood of speech: ") + len("mood of speech: ")
+                end_index = content.find(",", start_index)
+                mood = content[start_index:end_index].strip()
+                if mood == "Showing no emotion":
+                    elements_dictionary["mood"] = 1.0
+                elif mood == "Reading":
+                    elements_dictionary["mood"] = 2.0
+                else:
+                    elements_dictionary["mood"] = 3.0
+            
+            if "Pronunciation_posteriori_probability_score_percentage= :" in content:
+                start_index = content.find("Pronunciation_posteriori_probability_score_percentage= :") + len("Pronunciation_posteriori_probability_score_percentage= :")
+                elements_dictionary["pronunciation score"] = float(content[start_index:].split()[0])
+
+            if "rate_of_speech= " in content:
+                start_index = content.find("rate_of_speech= ") + len("rate_of_speech= ")
+                elements_dictionary["speech rate"] = float(content[start_index:].split()[0])
+
+            if "articulation_rate= " in content:
+                start_index = content.find("articulation_rate= ") + len("articulation_rate= ")
+                elements_dictionary["articulation rate"] = float(content[start_index:].split()[0])
+            
+            if "balance= " in content:
+                start_index = content.find("balance= ") + len("balance= ")
+                elements_dictionary["speaking ratio"] = float(content[start_index:].split()[0])
+
+            if "number_of_pauses= " in content:
+                start_index = content.find("number_of_pauses= ") + len("number_of_pauses= ")
+                elements_dictionary["number of pauses"] = float(content[start_index:].split()[0])
+            
         return elements_dictionary
 
     except Exception as e:
@@ -183,7 +111,7 @@ def get_elements_dictionary(txt_file_path):
         return None
 
 if __name__ == "__main__":
-    test_file = os.path.join(config.UPLOAD_FOLDER, "vid1.mp4")
+    test_file = os.path.join(config.UPLOAD_FOLDER, "vid2.mp4")
 
     try:
         wav_file = process_video(test_file)
