@@ -26,3 +26,5 @@ transcripts\vid25.txt         : 0.97, 22
 transcripts\vid26.txt         : 0.96, 57
 transcripts\vid27.txt         : 0.97, 25
 transcripts\vid28.txt         : 0.98, 9
+transcripts\vid29.txt         : 0.97, 37
+transcripts\vid30.txt         : 0.97, 24
