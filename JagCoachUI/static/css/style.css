@@ -45,3 +45,32 @@ h2 {
 #img {
     margin-top: 40px;
 }
+
+#transcriptContainer {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 16px;
+    font-family: 'Comic Sans MS', sans-serif;
+    text-align: left;
+    max-width: 70%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #800000;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    max-height: 300px;
+    overflow-y: auto; /* Allows scrolling for long transcriptions */
+}
+
+#transcriptTitle {
+    color: #800000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#transcriptResult {
+    white-space: pre-wrap; /* Keeps line breaks intact */
+    font-size: 14px;
+    line-height: 1.5;
+}

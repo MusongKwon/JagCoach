@@ -1,5 +1,7 @@
 # Ignore all user-uploaded videos and process videos
 uploads/
+processed_audio/
+whisper_cache/
 
 # Ignore the compiled python files
 __pycache__/
