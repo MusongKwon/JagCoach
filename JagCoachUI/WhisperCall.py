@@ -1,5 +1,6 @@
 import whisper
 import os
+from StatisticReturn import get_dictionary_path
 
 # Directories
 UPLOAD_FOLDER = "uploads"
@@ -31,18 +32,19 @@ def save_transcript(filename, text):
     """
     print("Saving transcript...")
 
-    transcript_path = os.path.join(TRANSCRIPT_FOLDER, filename + ".txt")
+    transcript_path = os.path.join(TRANSCRIPT_FOLDER, filename + "Transcript.txt")
 
     if os.path.exists(transcript_path):
         print(f"Skipping transcript save: {transcript_path} already exists.", flush=True)
+        get_dictionary_path(transcript_path)
         return
 
-    try:
-        with open(transcript_path, "w", encoding="utf-8") as f:
-            f.write(text)  # Save transcription text
-        print(f"Transcript saved: {transcript_path}")
-    except Exception as e:
-        print(f"Error saving transcript for {filename}: {e}")
+    else:
+        try:
+            with open(transcript_path, "w", encoding="utf-8") as f:
+                f.write(text)  # Save transcription text
+            print(f"Transcript saved: {transcript_path}")
+        except Exception as e:
+            print(f"Error saving transcript for {filename}: {e}")
+        get_dictionary_path(transcript_path)
 
-
-    print("All files processed successfully!")

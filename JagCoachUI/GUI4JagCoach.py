@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 import os
 from JagCoachUI.MP4toWAV import convert_mp4_to_wav
 import sys
+
+from JagCoachUI.MYSPAnalysis import get_elements_dictionary, get_elements
+
 sys.stdout.flush()
 
 
@@ -10,6 +13,10 @@ app = Flask(__name__)
 # Route for the main page
 @app.route("/", methods=["GET", "POST"])
 def index():
+    try:
+        os.remove("uploads/vid3.wav")
+    except:
+        pass
     if request.method == "POST":
         # Retrieve the file from the form
         file = request.files.get("video_file")
@@ -25,6 +32,9 @@ def index():
 
             try:
                 convert_mp4_to_wav(file_path, wav_path)
+                #text_file = get_elements(wav_path)
+                #print(text_file, flush=True)
+                #get_elements_dictionary(text_file)
                 print(f"Conversion done, file saved at: {wav_path}")  # Debugging print
             except Exception as e:
                 print(f"Error during conversion: {e}", flush=True)
