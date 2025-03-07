@@ -1,0 +1,93 @@
+body {
+    background-color: #1a1a1a;
+    color: #800000;
+    font-family: 'Comic Sans MS', sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 24px;
+}
+
+.file-frame {
+    margin-top: 20px;
+}
+
+.hidden-file-input {
+    display: none; /* Hide default file input */
+}
+
+.file-button {
+    padding: 10px 20px;
+    background-color: black;
+    color: #800000;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #800000;
+}
+
+.file-button:hover {
+    background-color: #800000;
+    color: white;
+}
+
+.upload-message {
+    margin-top: 20px;
+    color: white;
+}
+
+#img {
+    margin-top: 40px;
+}
+
+#transcriptContainer {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 16px;
+    font-family: 'Comic Sans MS', sans-serif;
+    text-align: left;
+    max-width: 70%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #800000;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    max-height: 300px;
+    overflow-y: auto; /* Allows scrolling for long transcriptions */
+}
+
+#transcriptTitle {
+    color: #800000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#transcriptResult {
+    white-space: pre-wrap; /* Keeps line breaks intact */
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+#loadSpinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #800000; /* Match your theme */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+    display: none; /* Hide by default */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
