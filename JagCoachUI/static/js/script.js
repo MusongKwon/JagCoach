@@ -1,6 +1,11 @@
 document.getElementById("fileInput").addEventListener("change", function () {
-    const file = this.files[0]
-    document.getElementById("fileName").textContent = "Selected file: " + file.name;
+    const file = this.files[0];
+    const transcriptResult = document.getElementById("transcriptResult");
+    const loadSpinner = document.getElementById("loadSpinner");
+
+    // Show the loading spinner and update the text
+    transcriptResult.textContent = "Processing transcription...";
+    loadSpinner.style.display = "block";
 
     const fileURL = URL.createObjectURL(file);
     const vElement = document.getElementById("vPlayback");
@@ -8,9 +13,6 @@ document.getElementById("fileInput").addEventListener("change", function () {
 
     sElement.src = fileURL;
     vElement.load();
-
-// Redhouse - this is to automatically submit the file when selected so it goes back to uploads
-// Added another functionality to automatically begin transcribing when uploaded. It just takes awhile.
 
     if (file) {
         const formData = new FormData();
@@ -28,11 +30,14 @@ document.getElementById("fileInput").addEventListener("change", function () {
         .then(response => response.json())
         .then(transcription => {
             console.log("Transcription:", transcription);
-            document.getElementById("transcriptResult").textContent = transcription.transcription || "No transcription found.";
+            transcriptResult.textContent = transcription.transcription || "No transcription found.";
         })
         .catch(error => {
             console.error("Upload/Transcription Error:", error);
-            document.getElementById("transcriptResult").textContent = "Error in transcription.";
+            transcriptResult.textContent = "Error in transcription.";
+        })
+        .finally(() => {
+            loadSpinner.style.display = "none";
         });
     }
 });

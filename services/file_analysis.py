@@ -22,6 +22,11 @@ def process_video(file_path):
     base_name = os.path.splitext(os.path.basename(file_path))[0]
     output_path = os.path.join(output_dir, base_name + ".wav")
 
+    if os.path.exists(output_path):
+        print(f"Output file already exists: {output_path}")
+        print(f"Im going to remove this right fr fr dont worry")
+        os.remove(output_path)
+
     try:
         print(f"Extracting audio from '{file_path}'")
         extract_audio(file_path, output_path, output_format="wav")
