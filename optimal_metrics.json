@@ -1,0 +1,11 @@
+{
+  "optimal_speech_metrics": {
+    "samples": 30,
+    "mood": { "mean": 2, "stdev": 1.17 },
+    "pronunciation_score": { "mean": 95.32, "stdev": 6.81 },
+    "speech_rate": { "mean": 3.67, "stdev": 0.48 },
+    "articulation_rate": { "mean": 4.93, "stdev": 0.25 },
+    "speaking_ratio": {"mean":  0.76, "stdev":  0.08},
+    "filler_word_ratio": {"mean": 0.98, "stdev": 0.01 }
+  }
+}

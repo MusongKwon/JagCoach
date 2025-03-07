@@ -1,0 +1,12 @@
+[]
+a Male, mood of speech: Reading, p-value/sample size= :0.00 5
+[]
+Pronunciation_posteriori_probability_score_percentage= :84.89
+[]
+rate_of_speech= 3 # syllables/sec original duration
+[]
+articulation_rate= 5 # syllables/sec speaking duration
+[]
+balance= 0.7 # ratio (speaking duration)/(original duration)
+[]
+number_of_pauses= 84
