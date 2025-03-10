@@ -1,11 +1,10 @@
 import os
 from pydub import AudioSegment
 from audio_extract import extract_audio
-from JagCoachUI.config import config  # 🔹 Import centralized config settings
+from JagCoachUI.config import config
 mysp = __import__("my-voice-analysis")
 from io import StringIO
 import sys
-from JagCoachUI.services.LLM import evaluate_speech
 import json
 
 def process_video(file_path):
@@ -68,6 +67,12 @@ def get_elements_dictionary(txt_file_path):
     # Generate output JSON file path by replacing .txt with .json
     json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
 
+    if os.path.exists(json_file_path):
+        os.remove(json_file_path)
+        print(f"Existing file '{json_file_path}' deleted.")
+
+    filler_file_path = ("uploads\\processed_audio\\filler_word_ratio.txt")
+
     # Initialize the dictionary with None values
     student_results = {
         "mood": None,
@@ -116,13 +121,20 @@ def get_elements_dictionary(txt_file_path):
                 start_index = content.find("balance= ") + len("balance= ")
                 student_results["speaking_ratio"] = float(content[start_index:].split()[0])
 
-            # Extract "filler word ratio" if present
-            if "filler_word_ratio= " in content:
-                start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
-                student_results["filler_word_ratio"] = float(content[start_index:].split()[0])
+    except Exception as e:
+        print(f"Error reading analysis file: {e}")
+        return None
+
+    try:
+        with open(filler_file_path, 'r') as file:
+            content = file.read()
+
+        if "filler_word_ratio= " in content:
+            start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
+            student_results["filler_word_ratio"] = round(float(content[start_index:].split()[0]), 2)
 
     except Exception as e:
-        print(f"Error reading file: {e}")
+        print(f"Error reading filler words file: {e}")
         return None
 
     # Create the final JSON structure
@@ -133,4 +145,4 @@ def get_elements_dictionary(txt_file_path):
         json.dump(json_data, json_file, indent=2)
 
     print(f"JSON file '{json_file_path}' created successfully.")
-    return json_file_path  # Returning for reference if needed
+    return json_file_path
