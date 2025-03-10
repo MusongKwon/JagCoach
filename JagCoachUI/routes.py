@@ -8,7 +8,6 @@ from JagCoachUI.config import config
 
 main_bp = Blueprint("main", __name__)
 
-
 @main_bp.route("/", methods=["GET", "POST"])
 @main_bp.route("/", methods=["GET", "POST"])
 def index():
@@ -33,10 +32,7 @@ def index():
                                    file_path=file_path)
     return render_template("index.html", message=None)
 
-# This portion is the Transcribing part I figured I could copy the same structure of what is above
-# What is changed is this now just looks for the .wav file. Before it was set up it was processing the video twice
-# when already the file_analysis.py file was already doing that. So this just transcribes now and does not create the
-# .wav file now. That function has been moved to file_analysis.py
+
 @main_bp.route("/transcribe", methods=["POST"])
 def transcribe():
     print(f"Transcribe has been summoned")
@@ -47,6 +43,21 @@ def transcribe():
             [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
             key=os.path.getctime
         )
+        
+        print("Begin looking for the wav file\n-------------------------")
+        print(f"Found it boss: {wav_file}")
+        transcription_text = transcript(wav_file)
+        print("Transcription complete bossman")
+        return jsonify({"transcription": transcription_text})
+    except Exception as e:
+        print(f"Error processing audio file: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@main_bp.route("/evaluate", methods=["POST"])
+def evaluate():
+    print(f"Evaluate has been summoned")
+    processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
+    try:
         json_file = max(
             [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("analysis.json")],
             key=os.path.getctime
@@ -55,16 +66,14 @@ def transcribe():
             [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("metrics.json")],
             key=os.path.getctime
         )
-        print("Begin looking for the wav file\n-------------------------")
-        print(f"Found it boss: {wav_file}")
+
         print("Begin looking for the json file\n-------------------------")
         print(f"Found it boss: {json_file}")
-        transcription_text = transcript(wav_file)
-        print("Transcription complete bossman")
+        print("Begin looking for the optimal file\n-------------------------")
+        print(f"Found it boss: {optimal_file}")
         evaluation_text = evaluate_speech(json_file,optimal_file)
         print("Evaluation complete bossman")
-        return jsonify({"transcription": evaluation_text})
-        #return jsonify({"transcription": transcription_text})
+        return jsonify({"evaluation": evaluation_text})
     except Exception as e:
         print(f"Error processing audio file: {e}")
         return jsonify({"error": str(e)}), 500
