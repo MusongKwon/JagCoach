@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, current_app, jsonify
 import os
 
-from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements
+from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
+from JagCoachUI.services.LLM import evaluate_speech
 from JagCoachUI.services.WhisperCall import transcript
 from JagCoachUI.config import config
 
@@ -27,6 +28,7 @@ def index():
             print(f"Video uploaded successfully: {file_path}")
             processed_audio_path = process_video(file_path)
             audio_txt_path = get_elements(processed_audio_path)
+            audio_json_path = get_elements_dictionary(audio_txt_path)
             return render_template("index.html", message=f"File '{file.filename}' uploaded successfully!",
                                    file_path=file_path)
     return render_template("index.html", message=None)
@@ -45,11 +47,24 @@ def transcribe():
             [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
             key=os.path.getctime
         )
+        json_file = max(
+            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("analysis.json")],
+            key=os.path.getctime
+        )
+        optimal_file = max(
+            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("metrics.json")],
+            key=os.path.getctime
+        )
         print("Begin looking for the wav file\n-------------------------")
         print(f"Found it boss: {wav_file}")
+        print("Begin looking for the json file\n-------------------------")
+        print(f"Found it boss: {json_file}")
         transcription_text = transcript(wav_file)
         print("Transcription complete bossman")
-        return jsonify({"transcription": transcription_text})
+        evaluation_text = evaluate_speech(json_file,optimal_file)
+        print("Evaluation complete bossman")
+        return jsonify({"transcription": evaluation_text})
+        #return jsonify({"transcription": transcription_text})
     except Exception as e:
         print(f"Error processing audio file: {e}")
         return jsonify({"error": str(e)}), 500
