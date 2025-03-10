@@ -1,7 +1,12 @@
-def get_filler_word_ratio(transcript_path):
-    dictionary_path = 'uploads/dictionary/filler_words.txt'
+import os
+from JagCoachUI.config import config
 
-    dictionary = load_dictionary(dictionary_path)
+def get_filler_word_ratio(transcript_path):
+    dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary\\")
+    filler_dictionary_path = os.path.join(dictionary_path, "filler_words.txt")
+    #'uploads/dictionary/filler_words.txt'
+
+    dictionary = load_dictionary(filler_dictionary_path)
     stats = check_words_in_file(transcript_path, dictionary)
 
     # Write results to an existing file
