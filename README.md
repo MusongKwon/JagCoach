@@ -4,10 +4,10 @@ JagCoach is an AI-assisted coaching platform for oral presentations (made by Mus
 
 ## Approach
 
-The presentation evaluation is done by the Meta Llama 3.2.  After being uploaded, the video file is converted to a .wav file.  Using the open-source Python "my-voice-analysis" module and the "openai-whisper" module, the student's speech is analyzed and transcribed.  This data is given to the LLM, compared to a benchmark, and evaluated to provide a feedback and a grade to the student.
+The presentation evaluation is done by the Meta Llama 3.2.  After being uploaded, the video file is converted to a .wav file.  Using the open-source Python "my-voice-analysis" module and the "openai-whisper" module, the student's speech is analyzed and transcribed.  This data is given to the LLM, compared to a benchmark, and evaluated to provide feedback and a grade to the student.
 
 ## Setup
-We used Python 3.12 and various Python packages, most notably [Open-AI's Whisper](https://github.com/openai/whisper) for transciption and an open-source library named [my-voice-analysis] from Shahabks on GitHub (https://github.com/Shahabks/my-voice-analysis) for speech analysis. You can install JagCoach's dependacies using the commands below:
+We used Python 3.12 and various Python packages, most notably [Open-AI's Whisper](https://github.com/openai/whisper) for transcription and an open-source library named [my-voice-analysis] from Shahabks on GitHub (https://github.com/Shahabks/my-voice-analysis) for speech analysis. You can install JagCoach's dependencies using the commands below:
 
 For the web framework, install the flask module:
 ```sh
@@ -48,7 +48,7 @@ Alternatively, you can run the following Linux command to download the LLM:
 ```sh
 curl -fsSL https://ollama.com/install.sh | sh
 ```
-Once these dependancies are installed, you can download JagCoach from the GitHub Repository (https://github.com/MusongKwon/JagCoach) and run it in an IDE or use the commands below:
+Once these dependencies are installed, you can download JagCoach from the GitHub Repository (https://github.com/MusongKwon/JagCoach) and run it in an IDE or use the commands below:
 
 ```sh
 git clone https://github.com/MusongKwon/JagCoach.git
