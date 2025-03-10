@@ -5,6 +5,8 @@ from JagCoachUI.config import config  # 🔹 Import centralized config settings
 mysp = __import__("my-voice-analysis")
 from io import StringIO
 import sys
+from JagCoachUI.services.LLM import evaluate_speech
+import json
 
 def process_video(file_path):
     if not os.path.exists(file_path):
@@ -63,67 +65,72 @@ def get_elements(file_path):
     return output_txt
     
 def get_elements_dictionary(txt_file_path):
-    # Initialize the dictionary with default values
-    elements_dictionary = {
+    # Generate output JSON file path by replacing .txt with .json
+    json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
+
+    # Initialize the dictionary with None values
+    student_results = {
         "mood": None,
-        "pronunciation score": None,
-        "speech rate": None,
-        "articulation rate": None,
-        "speaking ratio": None,
-        "number of pauses": None
+        "pronunciation_score": None,
+        "speech_rate": None,
+        "articulation_rate": None,
+        "speaking_ratio": None,
+        "filler_word_ratio": None
     }
 
-    # Fill in the dictionary with extracted values
+    # Extract values from the text file
     try:
         with open(txt_file_path, 'r') as file:
-            # Read the file content
             content = file.read()
 
-            # Search for the line with "mood="
+            # Extract "mood of speech"
             if "mood of speech: " in content:
                 start_index = content.find("mood of speech: ") + len("mood of speech: ")
                 end_index = content.find(",", start_index)
                 mood = content[start_index:end_index].strip()
                 if mood == "Showing no emotion":
-                    elements_dictionary["mood"] = 1.0
+                    student_results["mood"] = 1
                 elif mood == "Reading":
-                    elements_dictionary["mood"] = 2.0
-                else:
-                    elements_dictionary["mood"] = 3.0
-            
-            if "Pronunciation_posteriori_probability_score_percentage= :" in content:
-                start_index = content.find("Pronunciation_posteriori_probability_score_percentage= :") + len("Pronunciation_posteriori_probability_score_percentage= :")
-                elements_dictionary["pronunciation score"] = float(content[start_index:].split()[0])
+                    student_results["mood"] = 2
+                elif mood:
+                    student_results["mood"] = 3
 
+            # Extract "pronunciation score"
+            if "Pronunciation_posteriori_probability_score_percentage= :" in content:
+                start_index = content.find("Pronunciation_posteriori_probability_score_percentage= :") + len(
+                    "Pronunciation_posteriori_probability_score_percentage= :")
+                student_results["pronunciation_score"] = float(content[start_index:].split()[0])
+
+            # Extract "speech rate"
             if "rate_of_speech= " in content:
                 start_index = content.find("rate_of_speech= ") + len("rate_of_speech= ")
-                elements_dictionary["speech rate"] = float(content[start_index:].split()[0])
+                student_results["speech_rate"] = float(content[start_index:].split()[0])
 
+            # Extract "articulation rate"
             if "articulation_rate= " in content:
                 start_index = content.find("articulation_rate= ") + len("articulation_rate= ")
-                elements_dictionary["articulation rate"] = float(content[start_index:].split()[0])
-            
+                student_results["articulation_rate"] = float(content[start_index:].split()[0])
+
+            # Extract "speaking ratio"
             if "balance= " in content:
                 start_index = content.find("balance= ") + len("balance= ")
-                elements_dictionary["speaking ratio"] = float(content[start_index:].split()[0])
+                student_results["speaking_ratio"] = float(content[start_index:].split()[0])
 
-            if "number_of_pauses= " in content:
-                start_index = content.find("number_of_pauses= ") + len("number_of_pauses= ")
-                elements_dictionary["number of pauses"] = float(content[start_index:].split()[0])
-            
-        return elements_dictionary
+            # Extract "filler word ratio" if present
+            if "filler_word_ratio= " in content:
+                start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
+                student_results["filler_word_ratio"] = float(content[start_index:].split()[0])
 
     except Exception as e:
-        print(f"Error while extracting elements: {e}")
+        print(f"Error reading file: {e}")
         return None
 
-if __name__ == "__main__":
-    test_file = os.path.join(config.UPLOAD_FOLDER, "vid1.mp4")
+    # Create the final JSON structure
+    json_data = {"student_results": student_results}
 
-    try:
-        wav_file = process_video(test_file)
-        txt_file = get_elements(wav_file)
-        print(get_elements_dictionary(txt_file))
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    # Write to JSON file
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=2)
+
+    print(f"JSON file '{json_file_path}' created successfully.")
+    return json_file_path  # Returning for reference if needed
