@@ -1,5 +1,5 @@
 # JagCoach
-JagCoach is an AI-assisted coaching platform for oral presentations (made by Musong, Caleb, Jesus, Talia, and Redhouse).  This application was made for students who hope to improve their class presentations and develop stronger public speaking skills.
+JagCoach is an AI-assisted coaching platform for oral presentations (made by Musong, Caleb, Jesus, Reyden, Talia, and Redhouse).  This application was made for students who hope to improve their class presentations and develop stronger public speaking skills.
 
 
 ## Approach
