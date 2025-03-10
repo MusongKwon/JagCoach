@@ -27,6 +27,8 @@ def get_transcript(wavPath):
         transcript_path = os.path.join(TRANSCRIPT_FOLDER, filename + "Transcript.txt")
         with open(transcript_path, "w", encoding="utf-8") as f:
             f.write(transcribed_text)
+
+        return transcript_path
             
     except Exception as e:
         print(f"Error processing audio file: {e}")
