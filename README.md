@@ -65,3 +65,21 @@ Note: Ollama should be running in the background as JagCoach is running.
 ## Example usage
 
 Below is an example of JagCoach being used to grade a student's presentation.
+Click the IP address:
+![image](https://github.com/user-attachments/assets/a344ca01-c0f8-41bf-a8fa-81239c54c6f6)
+
+This page should appear:
+![image](https://github.com/user-attachments/assets/05615bb4-26fd-4426-86b2-9d6aeebde3ec)
+
+Choose a video file to upload:
+![chrome_qpbGKbNd0V](https://github.com/user-attachments/assets/9916de43-82b9-42d3-83dc-1d18e79083ba)
+
+After selecting a video, the transcription and presentation evaluation will begin:
+![image](https://github.com/user-attachments/assets/439eb2a2-8965-40b5-b85a-33f3d5066d88)
+
+The evalution and transcription should appear in their respective text boxes after they finish:
+![image](https://github.com/user-attachments/assets/01be7191-4344-44d9-814d-31d409b9a85d)
+
+
+
+
