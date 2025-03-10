@@ -7,22 +7,27 @@ JagCoach is an AI-assisted coaching platform for oral presentations (made by Mus
 The presentation evaluation is done by the Meta Llama 3.2.  After being uploaded, the video file is converted to a .wav file.  Using the open-source Python "my-voice-analysis" module and the "openai-whisper" module, the student's speech is analyzed and transcribed.  This data is given to the LLM, compared to a benchmark, and evaluated to provide feedback and a grade to the student.
 
 ## Setup
-We used Python 3.12 and various Python packages, most notably [Open-AI's Whisper](https://github.com/openai/whisper) for transcription and an open-source library named [my-voice-analysis] from Shahabks on GitHub (https://github.com/Shahabks/my-voice-analysis) for speech analysis. You can install JagCoach's dependencies using the commands below:
+We used Python 3.12 and various Python packages, most notably [Open-AI's Whisper](https://github.com/openai/whisper) for transcription and an open-source library named [my-voice-analysis] from Shahabks on GitHub (https://github.com/Shahabks/my-voice-analysis) for speech analysis. You can install JagCoach's dependencies using the commands below.  Be sure to run these commands as an administrator:
 
 For the web framework, install the flask module:
 ```sh
 pip install flask
 ```
 
-For .wav conversion and sound configuration, install audio_extract and pydub:
+You'll first need to install choco to install ffmpeg:
+```sh
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
 
+If you don't see any errors, install ffmpeg:
+```sh
+choco install ffmpeg
+```
+
+For .wav conversion and sound configuration, install audio_extract and pydub:
 ```sh
 pip install pydub
 pip install audio_extract
-```
-You will likely need to install setup-tools: 
-```sh
-pip install setuptools
 ```
 
 For the speech analysis, you will need my-voice-analysis
@@ -59,4 +64,4 @@ Note: Ollama should be running in the background as JagCoach is running.
 
 ## Example usage
 
-Below is an example of JagCoach being used to grade a students presentation.
+Below is an example of JagCoach being used to grade a student's presentation.
