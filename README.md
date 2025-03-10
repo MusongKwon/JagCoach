@@ -55,6 +55,7 @@ git clone https://github.com/MusongKwon/JagCoach.git
 cd JagCoach
 python3 app.py
 ```
+Note: Ollama should be running in the background as JagCoach is running.
 
 ## Example usage
 
