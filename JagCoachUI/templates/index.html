@@ -26,9 +26,20 @@
         <source src="" type="video/mp4">
     </video>
 
+    <h3 id="evaluationTitle">Our Evaluation</h3>
+    <div id="evaluationContainer">
+        <p id="evaluationResult">Upload Presentation to Receive Evaluation</p>
+        <div id="evaluationSpinner" class="loader hidden"></div>
+    </div>
+
+    <div id="transcriptControls">
+        <button id="toggleButton">Toggle Transcription</button>
+    </div>
+
     <h3 id="transcriptTitle">Transcription Output:</h3>
     <div id="transcriptContainer">
         <p id="transcriptResult">Upload Video to Transcribe</p>
+        <p id="ellipsis" style="display:none;">. . .</p>
         <div id="loadSpinner" class="loader hidden"></div>
     </div>
 {% endblock %}
