@@ -4,6 +4,7 @@ import os
 from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
 from JagCoachUI.services.LLM import evaluate_speech
 from JagCoachUI.services.WhisperCall import get_transcript
+from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from JagCoachUI.config import config
 
 main_bp = Blueprint("main", __name__)
@@ -28,6 +29,7 @@ def index():
             processed_audio_path = process_video(file_path)
             audio_txt_path = get_elements(processed_audio_path)
             transcription_text_path = get_transcript(processed_audio_path)
+            filler_word_ratio_path = get_filler_word_ratio(transcription_text_path)
             audio_json_path = get_elements_dictionary(audio_txt_path)
             return render_template("index.html", message=f"File '{file.filename}' uploaded successfully!",
                                    file_path=file_path)
