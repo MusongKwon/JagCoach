@@ -3,7 +3,7 @@ import os
 
 from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
 from JagCoachUI.services.LLM import evaluate_speech
-from JagCoachUI.services.WhisperCall import transcript
+from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.config import config
 
 main_bp = Blueprint("main", __name__)
@@ -43,10 +43,12 @@ def transcribe():
             [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
             key=os.path.getctime
         )
-        
+
         print("Begin looking for the wav file\n-------------------------")
         print(f"Found it boss: {wav_file}")
-        transcription_text = transcript(wav_file)
+
+        transcription_text = get_transcript(wav_file)
+
         print("Transcription complete bossman")
         return jsonify({"transcription": transcription_text})
     except Exception as e:

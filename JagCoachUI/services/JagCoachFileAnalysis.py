@@ -42,7 +42,7 @@ def process_video(file_path):
 # mysp functions print, so we need to create a text file to capture the output
 def get_elements(file_path):
     p = os.path.splitext(os.path.basename(file_path))[0]  # Extract filename
-    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     output_txt = os.path.join(c, f"{p}_analysis.txt")
     print(c + p)
 
@@ -67,6 +67,12 @@ def get_elements(file_path):
 def get_elements_dictionary(txt_file_path):
     # Generate output JSON file path by replacing .txt with .json
     json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
+
+    if os.path.exists(json_file_path):
+        os.remove(json_file_path)
+        print(f"Existing file '{json_file_path}' deleted.")
+
+    filler_file_path = ("uploads/processed_audio/filler_word_ratio.txt")
 
     # Initialize the dictionary with None values
     student_results = {
@@ -116,13 +122,20 @@ def get_elements_dictionary(txt_file_path):
                 start_index = content.find("balance= ") + len("balance= ")
                 student_results["speaking_ratio"] = float(content[start_index:].split()[0])
 
-            # Extract "filler word ratio" if present
-            if "filler_word_ratio= " in content:
-                start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
-                student_results["filler_word_ratio"] = float(content[start_index:].split()[0])
+    except Exception as e:
+        print(f"Error reading analysis file: {e}")
+        return None
+
+    try:
+        with open(filler_file_path, 'r') as file:
+            content = file.read()
+
+        if "filler_word_ratio= " in content:
+            start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
+            student_results["filler_word_ratio"] = round(float(content[start_index:].split()[0]), 2)
 
     except Exception as e:
-        print(f"Error reading file: {e}")
+        print(f"Error reading filler words file: {e}")
         return None
 
     # Create the final JSON structure

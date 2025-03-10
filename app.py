@@ -1,6 +1,9 @@
 from flask import Flask
 from JagCoachUI.routes import main_bp  # Import routes from JagCoach/JagCoachUI/routes.py
 from JagCoachUI.config import config  # Import configuration
+#import ssl
+
+#ssl._create_default_https_context = ssl._create_unverified_context
 
 app = Flask(__name__, template_folder="JagCoachUI/templates", static_folder="JagCoachUI/static")
 

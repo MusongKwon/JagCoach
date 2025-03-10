@@ -1,0 +1,12 @@
+[]
+a female, mood of speech: speaking passionately, p-value/sample size= :0.00 5
+[]
+Pronunciation_posteriori_probability_score_percentage= :95.01
+[]
+rate_of_speech= 4 # syllables/sec original duration
+[]
+articulation_rate= 5 # syllables/sec speaking duration
+[]
+balance= 0.8 # ratio (speaking duration)/(original duration)
+[]
+number_of_pauses= 39

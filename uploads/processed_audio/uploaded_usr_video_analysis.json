@@ -1,0 +1,10 @@
+{
+  "student_results": {
+    "mood": 3,
+    "pronunciation_score": 95.01,
+    "speech_rate": 4.0,
+    "articulation_rate": 5.0,
+    "speaking_ratio": 0.8,
+    "filler_word_ratio": 0.99
+  }
+}

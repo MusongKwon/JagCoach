@@ -57,7 +57,7 @@ def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False
               Speech Rate: Syllables/second (original duration, including pauses).
               Articulation Rate: Syllables/second (speaking duration, excluding pauses).
               Speaking Ratio: Speaking time / total time.
-              Filler word ratio: The number of filler words/ total number of words. The higher the better.
+              Filler word ratio: The (total_word_count - filler_word_count) / total_word_count. The higher the better, 1 means no filler words.
             }}
 
             This is the student's results for the metrics: 
