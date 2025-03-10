@@ -3,13 +3,6 @@ from ollama import chat
 from ollama import ChatResponse
 
 def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False):
-    """
-    Evaluates a student's speech based on metrics and provides feedback.
-
-    :param student_json_path: Path to the JSON file containing student results.
-    :param optimal_json_path: Path to the JSON file containing optimal speech metrics.
-    :param interactive_mode: If True, allows follow-up questions. If False, only prints the feedback.
-    """
 
     # Load student results from JSON file
     with open(student_json_path, "r") as file:
@@ -57,7 +50,7 @@ def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False
               Speech Rate: Syllables/second (original duration, including pauses).
               Articulation Rate: Syllables/second (speaking duration, excluding pauses).
               Speaking Ratio: Speaking time / total time.
-              Filler word ratio: The number of filler words/ total number of words. The higher the better.
+              Filler word ratio: The (total_word_count - filler_word_count) / total_word_count. The higher the better, 1 means no filler words.
             }}
 
             This is the student's results for the metrics: 
@@ -76,27 +69,3 @@ def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False
     # Get initial AI feedback
     response: ChatResponse = chat(model='llama3.2', messages=messages)
     return response['message']['content']
-
-    # Store AI response in conversation history
-    #messages.append({'role': 'assistant', 'content': response['message']['content']})
-'''
-    # Check if interactivity is enabled
-    if interactive_mode:
-        print("You can now ask follow-up questions. Type 'exit' or 'quit' to end.\n")
-
-        while True:
-            user_input = input("You: ")
-
-            if user_input.lower() in ["exit", "quit"]:
-                print("Exiting chat. Goodbye!")
-                break
-
-            messages.append({'role': 'user', 'content': user_input})
-
-            response: ChatResponse = chat(model='llama3.2', messages=messages)
-
-            print(f"AI: {response['message']['content']}\n")
-
-            # Store AI response in conversation history
-            messages.append({'role': 'assistant', 'content': response['message']['content']})
-'''
