@@ -67,10 +67,6 @@ def get_elements_dictionary(txt_file_path):
     # Generate output JSON file path by replacing .txt with .json
     json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
 
-    if os.path.exists(json_file_path):
-        os.remove(json_file_path)
-        print(f"Existing file '{json_file_path}' deleted.")
-
     upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
     filler_file_path = os.path.join(upload_folder, "filler_word_ratio.txt")
 
