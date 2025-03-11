@@ -13,7 +13,7 @@ def get_transcript(wavPath):
         filename = os.path.splitext(os.path.basename(wavPath))[0]  # Extract filename without extension
 
         #transcript_path = os.path.join(TRANSCRIPT_FOLDER, filename + "Transcript.txt")
-        processed_audio_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+        processed_audio_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
         transcript_path = os.path.join(processed_audio_path, filename + "_transcript.txt")
 
         if os.path.exists(transcript_path):
