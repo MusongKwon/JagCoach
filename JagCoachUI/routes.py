@@ -20,17 +20,24 @@ def index():
 
             file_ext = os.path.splitext(file.filename)[1].lower()
             file_path = os.path.join(upload_folder, f"uploaded_usr_video{file_ext}")
+
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"Existing file '{file_path}' deleted.")
+
             try:
                 file.save(file_path)
-                print(f"Video uploaded successfully: {file_path}")  # Debugging print
+                print(f"Video uploaded successfully: {file_path}")
             except Exception as e:
                 print(f"Error saving file: {e}")
             print(f"Video uploaded successfully: {file_path}")
+
             processed_audio_path = process_video(file_path)
             audio_txt_path = get_elements(processed_audio_path)
             transcription_text_path = get_transcript(processed_audio_path)
             filler_word_ratio_path = get_filler_word_ratio(transcription_text_path)
             audio_json_path = get_elements_dictionary(audio_txt_path)
+
             return render_template("index.html", message=f"File '{file.filename}' uploaded successfully!",
                                    file_path=file_path)
     return render_template("index.html", message=None)
@@ -39,11 +46,11 @@ def index():
 @main_bp.route("/transcribe", methods=["POST"])
 def transcribe():
     print(f"Transcribe has been summoned")
-    transcripts_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "transcripts")
+    processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
 
     try:
         txt_file = max(
-            [os.path.join(transcripts_folder, f) for f in os.listdir(transcripts_folder) if f.endswith(".txt")],
+            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("transcript.txt")],
             key=os.path.getctime
         )
 
