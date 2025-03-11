@@ -41,7 +41,7 @@ def process_video(file_path):
 # mysp functions print, so we need to create a text file to capture the output
 def get_elements(file_path):
     p = os.path.splitext(os.path.basename(file_path))[0]  # Extract filename
-    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     output_txt = os.path.join(c, f"{p}_analysis.txt")
     #print(c + p)
 
