@@ -68,7 +68,8 @@ def get_elements_dictionary(txt_file_path):
     # Generate output JSON file path by replacing .txt with .json
     json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
 
-    upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
+    #upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
     filler_file_path = os.path.join(upload_folder, "filler_word_ratio.txt")
 
     # Initialize the dictionary with None values
