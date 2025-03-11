@@ -2,13 +2,13 @@ import os
 from JagCoachUI.config import config
 
 def get_filler_word_ratio(transcript_path):
-    dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary\\")
+    dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary")
     filler_dictionary_path = os.path.join(dictionary_path, "filler_words.txt")
 
     dictionary = load_dictionary(filler_dictionary_path)
     stats = check_words_in_file(transcript_path, dictionary)
 
-    processed_audio_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    processed_audio_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     filler_ratio_path = os.path.join(processed_audio_path, "filler_word_ratio.txt")
 
     if os.path.exists(filler_ratio_path):
