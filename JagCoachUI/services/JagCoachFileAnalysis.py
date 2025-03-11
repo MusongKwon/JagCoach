@@ -12,8 +12,8 @@ def process_video(file_path):
         raise FileNotFoundError(f"File '{file_path}' not found.")
 
     # Use configured audio output directory
-    output_dir = os.path.join(config.UPLOAD_FOLDER, "processed_audio")
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
+    #os.makedirs(output_dir, exist_ok=True)
 
     base_name = os.path.splitext(os.path.basename(file_path))[0]
     output_path = os.path.join(output_dir, base_name + ".wav")
@@ -41,11 +41,14 @@ def process_video(file_path):
 # mysp functions print, so we need to create a text file to capture the output
 def get_elements(file_path):
     p = os.path.splitext(os.path.basename(file_path))[0]  # Extract filename
-    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
-    #c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
     output_txt = os.path.join(c, f"{p}_analysis.txt")
-    print(c + p)
+    #print(c + p)
 
+    if os.path.exists(output_txt):
+        os.remove(output_txt)
+        print(f"Existing file '{output_txt}' deleted.")
+    
     original_stdout = sys.stdout  # Save the original stdout
     sys.stdout = output_capture = StringIO()  # Redirect stdout to a string buffer
 
@@ -68,8 +71,11 @@ def get_elements_dictionary(txt_file_path):
     # Generate output JSON file path by replacing .txt with .json
     json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
 
-    upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
-    #upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    if os.path.exists(json_file_path):
+        os.remove(json_file_path)
+        print(f"Existing file '{json_file_path}' deleted.")
+
+    upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
     filler_file_path = os.path.join(upload_folder, "filler_word_ratio.txt")
 
     # Initialize the dictionary with None values
