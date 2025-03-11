@@ -2,16 +2,21 @@ import os
 from JagCoachUI.config import config
 
 def get_filler_word_ratio(transcript_path):
-    dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary")
-    #dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary\\")
+    dictionary_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "dictionary\\")
     filler_dictionary_path = os.path.join(dictionary_path, "filler_words.txt")
-    #'uploads/dictionary/filler_words.txt'
 
     dictionary = load_dictionary(filler_dictionary_path)
     stats = check_words_in_file(transcript_path, dictionary)
 
+    processed_audio_path = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio\\")
+    filler_ratio_path = os.path.join(processed_audio_path, "filler_word_ratio.txt")
+
+    if os.path.exists(filler_ratio_path):
+        os.remove(filler_ratio_path)
+        print(f"Existing file '{filler_ratio_path}' deleted.")
+
     # Write results to an existing file
-    with open("uploads/processed_audio/filler_word_ratio.txt", "w", encoding="utf-8") as output_file:
+    with open(filler_ratio_path, "w", encoding="utf-8") as output_file:
         # Write the formatted line with the stats aligned
         output_file.write(f"filler_word_ratio= {stats}\n")
 
