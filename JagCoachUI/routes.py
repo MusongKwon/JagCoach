@@ -86,7 +86,6 @@ def evaluate():
         print(f"Found it boss: {optimal_file}")
         evaluation_text = evaluate_speech(json_file,optimal_file)
         print("Evaluation complete bossman")
-        test()
         return jsonify({"evaluation": evaluation_text})
     except Exception as e:
         print(f"Error processing audio file: {e}")
