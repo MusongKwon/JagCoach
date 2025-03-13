@@ -67,5 +67,5 @@ def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False
     ]
 
     # Get initial AI feedback
-    response: ChatResponse = chat(model='llama3.2', messages=messages)
+    response: ChatResponse = chat(model='llama3.2:latest', messages=messages)
     return response['message']['content']
