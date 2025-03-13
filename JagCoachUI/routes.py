@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, current_app, jsonify
 import os
 
 from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
-from JagCoachUI.services.LLM import evaluate_speech
+from JagCoachUI.services.LLM import evaluate_speech, test
 from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from JagCoachUI.config import config
@@ -86,6 +86,7 @@ def evaluate():
         print(f"Found it boss: {optimal_file}")
         evaluation_text = evaluate_speech(json_file,optimal_file)
         print("Evaluation complete bossman")
+        test()
         return jsonify({"evaluation": evaluation_text})
     except Exception as e:
         print(f"Error processing audio file: {e}")
