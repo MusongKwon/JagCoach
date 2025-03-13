@@ -69,9 +69,3 @@ def evaluate_speech(student_json_path, optimal_json_path, interactive_mode=False
     # Get initial AI feedback
     response: ChatResponse = chat(model='llama3.2', messages=messages)
     return response['message']['content']
-
-    def test() {
-        response = ollama.generate(model='llama3.2', prompt='Hello')
-        print(response)
-
-    }
