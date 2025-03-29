@@ -16,7 +16,6 @@ def index():
         file = request.files.get("video_file")
         if file:
             upload_folder = current_app.config["UPLOAD_FOLDER"]
-            #os.makedirs(upload_folder, exist_ok=True)
 
             file_ext = os.path.splitext(file.filename)[1].lower()
             file_path = os.path.join(upload_folder, f"uploaded_usr_video{file_ext}")
@@ -32,11 +31,7 @@ def index():
                 print(f"Error saving file: {e}")
             print(f"Video uploaded successfully: {file_path}")
 
-            processed_audio_path = process_video(file_path)
-            audio_txt_path = get_elements(processed_audio_path)
-            transcription_text_path = get_transcript(processed_audio_path)
-            filler_word_ratio_path = get_filler_word_ratio(transcription_text_path)
-            audio_json_path = get_elements_dictionary(audio_txt_path)
+            processed_audio_path = process_video(file_path)            
 
             return render_template("index.html", message=f"File '{file.filename}' uploaded successfully!",
                                    file_path=file_path)
@@ -49,16 +44,16 @@ def transcribe():
     processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
 
     try:
-        txt_file = max(
-            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("transcript.txt")],
+        wav_file = max(
+            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
             key=os.path.getctime
         )
 
         print("Begin looking for the wav file\n-------------------------")
-        print(f"Found it boss: {txt_file}")
+        print(f"Found it boss: {wav_file}")
 
-        with open(txt_file, "r") as f:
-            transcription_text = f.read()
+        transcription_text = get_transcript(wav_file)
+        get_filler_word_ratio(transcription_text)
 
         print("Transcription complete bossman")
         return jsonify({"transcription": transcription_text})
@@ -71,14 +66,18 @@ def evaluate():
     print(f"Evaluate has been summoned")
     processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
     try:
-        json_file = max(
-            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith("analysis.json")],
+        wav_file = max(
+            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
             key=os.path.getctime
         )
 
         #test()
-        print("Begin looking for the json file\n-------------------------")
-        print(f"Found it boss: {json_file}")
+        print("Begin looking for the wav file\n-------------------------")
+        print(f"Found it boss: {wav_file}")
+        txt_file = get_elements(wav_file)
+        json_file = get_elements_dictionary(txt_file)
+
+        print("Starting Evaluation")
         evaluation_text = evaluate_speech(json_file)
         print("Evaluation complete bossman")
         return jsonify({"evaluation": evaluation_text})
