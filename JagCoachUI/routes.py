@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, current_app, jsonify
 import os
-
-from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
+from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements
 from JagCoachUI.services.LLM import evaluate_speech
 from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
@@ -75,10 +74,9 @@ def evaluate():
         print("Begin looking for the wav file\n-------------------------")
         print(f"Found it boss: {wav_file}")
         txt_file = get_elements(wav_file)
-        json_file = get_elements_dictionary(txt_file)
 
         print("Starting Evaluation")
-        evaluation_text = evaluate_speech(json_file)
+        evaluation_text = evaluate_speech()
         print("Evaluation complete bossman")
         return jsonify({"evaluation": evaluation_text})
     except Exception as e:
