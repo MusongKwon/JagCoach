@@ -1,20 +1,17 @@
 import os
+import re
 from pydub import AudioSegment
 from audio_extract import extract_audio
 from JagCoachUI.config import config
 mysp = __import__("my-voice-analysis")
 from io import StringIO
 import sys
-import json
 
 def process_video(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File '{file_path}' not found.")
 
-    # Use configured audio output directory
     output_dir = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
-    #os.makedirs(output_dir, exist_ok=True)
-
     base_name = os.path.splitext(os.path.basename(file_path))[0]
     output_path = os.path.join(output_dir, base_name + ".wav")
 
@@ -40,10 +37,9 @@ def process_video(file_path):
 
 # mysp functions print, so we need to create a text file to capture the output
 def get_elements(file_path):
-    p = os.path.splitext(os.path.basename(file_path))[0]  # Extract filename
+    p = os.path.splitext(os.path.basename(file_path))[0]
     c = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     output_txt = os.path.join(c, f"{p}_analysis.txt")
-    #print(c + p)
 
     if os.path.exists(output_txt):
         os.remove(output_txt)
@@ -67,15 +63,17 @@ def get_elements(file_path):
 
     return output_txt
     
-def get_elements_dictionary(txt_file_path):
-    # Generate output JSON file path by replacing .txt with .json
-    json_file_path = os.path.splitext(txt_file_path)[0] + ".json"
+PRONUNCIATION_SCORES = {95: 24, 90: 21, 80: 18, 75: 12, 70: 6}
+PRONUNCIATION_SCORES_WITH_MOOD = {95: 20, 90: 18, 80: 15, 75: 10, 70: 5}
+SPEECH_RATE_SCORES = {4.0: (12, 10), 3.0: (7, 6)}
+ARTICULATION_SCORES = {5.0: (20, 17), 4.0: (14, 11), 3.0: (6, 5), 6.0: (6, 5)}
+SPEAKING_RATIO_SCORES = {0.8: (20, 17), 0.9: (20, 17), 0.7: (15, 12), 0.6: (10, 8), 1.0: (10, 8), 0.5: (6, 5)}
+FILLER_WORD_SCORES = {0.97: (24, 20), 0.95: (18, 15), 0.90: (12, 10), 0.85: (6, 5)}
 
-    if os.path.exists(json_file_path):
-        os.remove(json_file_path)
-        print(f"Existing file '{json_file_path}' deleted.")
+def get_elements_dictionary():
 
     upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
+    analysis_file_path = os.path.join(upload_folder, "uploaded_usr_video_analysis.txt")
     filler_file_path = os.path.join(upload_folder, "filler_word_ratio.txt")
 
     # Initialize the dictionary with None values
@@ -91,165 +89,39 @@ def get_elements_dictionary(txt_file_path):
 
     # Extract values from the text file
     try:
-        with open(txt_file_path, 'r') as file:
-            content = file.read()
-
-            if "mood of speech: " in content:
-                start_index = content.find("mood of speech: ") + len("mood of speech: ")
-                end_index = content.find(",", start_index)
-                mood = content[start_index:end_index].strip()
-                if mood == "Showing no emotion":
-                    student_results["mood"] = 0
-                elif mood == "Reading":
-                    student_results["mood"] = 8
-                elif mood:
-                    student_results["mood"] = 16
-            
-            if "Pronunciation_posteriori_probability_score_percentage= :" in content:
-                start_index = content.find("Pronunciation_posteriori_probability_score_percentage= :") + len(
-                    "Pronunciation_posteriori_probability_score_percentage= :")
-                pronunciation_response = float(content[start_index:].split()[0])
-                if student_results["mood"] == None:
-                    if pronunciation_response >= 95:
-                        student_results["pronunciation_score"] = 24
-                    elif pronunciation_response >= 90:
-                        student_results["pronunciation_score"] = 21
-                    elif pronunciation_response >= 80:
-                        student_results["pronunciation_score"] = 18
-                    elif pronunciation_response >= 75:
-                        student_results["pronunciation_score"] = 12
-                    elif pronunciation_response >= 70:
-                        student_results["pronunciation_score"] = 6
-                    else:
-                        student_results["pronunciation_score"] = 0
-                else:
-                    if pronunciation_response >= 95:
-                        student_results["pronunciation_score"] = 20
-                    elif pronunciation_response >= 90:
-                        student_results["pronunciation_score"] = 18
-                    elif pronunciation_response >= 80:
-                        student_results["pronunciation_score"] = 15
-                    elif pronunciation_response >= 75:
-                        student_results["pronunciation_score"] = 10
-                    elif pronunciation_response >= 70:
-                        student_results["pronunciation_score"] = 5
-                    else:
-                        student_results["pronunciation_score"] = 0
-                
-            if "rate_of_speech= " in content:
-                start_index = content.find("rate_of_speech= ") + len("rate_of_speech= ")
-                speech_rate_response = float(content[start_index:].split()[0])
-                if student_results["mood"] == None:
-                    if speech_rate_response == 4.0:
-                        student_results["speech_rate"] = 12
-                    elif speech_rate_response == 3.0:
-                        student_results["speech_rate"] = 7
-                    else:
-                        student_results["speech_rate"] = 0
-                else:
-                    if speech_rate_response == 4.0:
-                        student_results["speech_rate"] = 10
-                    elif speech_rate_response == 3.0:
-                        student_results["speech_rate"] = 6
-                    else:
-                        student_results["speech_rate"] = 0
-            
-            if "articulation_rate= " in content:
-                start_index = content.find("articulation_rate= ") + len("articulation_rate= ")
-                articulation_rate_result = float(content[start_index:].split()[0])
-                if student_results["mood"] == None:
-                    if articulation_rate_result == 5.0:
-                        student_results["articulation_rate"] = 20
-                    elif articulation_rate_result == 4.0:
-                        student_results["articulation_rate"] = 14
-                    elif articulation_rate_result == 3.0 or articulation_rate_result == 6.0:
-                        student_results["articulation_rate"] = 6
-                    else:
-                        student_results["articulation_rate"] = 0
-                else:
-                    if articulation_rate_result == 5.0:
-                        student_results["articulation_rate"] = 17
-                    elif articulation_rate_result == 4.0:
-                        student_results["articulation_rate"] = 11
-                    elif articulation_rate_result == 3.0 or articulation_rate_result == 6.0:
-                        student_results["articulation_rate"] = 5
-                    else:
-                        student_results["articulation_rate"] = 0
-
-            if "balance= " in content:
-                start_index = content.find("balance= ") + len("balance= ")
-                balance_response = float(content[start_index:].split()[0])
-                if student_results["mood"] == None:
-                    if balance_response == 0.8 or balance_response == 0.9:
-                        student_results["speaking_ratio"] = 20
-                    elif balance_response == 0.7:
-                        student_results["speaking_ratio"] = 15
-                    elif balance_response == 0.6 or balance_response == 1.0:
-                        student_results["speaking_ratio"] = 10
-                    elif balance_response == 0.5:
-                        student_results["speaking_ratio"] = 6
-                    else:
-                        student_results["speaking_ratio"] = 0
-                else:
-                    if balance_response == 0.8 or balance_response == 0.9:
-                        student_results["speaking_ratio"] = 17
-                    elif balance_response == 0.7:
-                        student_results["speaking_ratio"] = 12
-                    elif balance_response == 0.6 or balance_response == 1.0:
-                        student_results["speaking_ratio"] = 8
-                    elif balance_response == 0.5:
-                        student_results["speaking_ratio"] = 5
-                    else:
-                        student_results["speaking_ratio"] = 0
+        with open(analysis_file_path, 'r') as file:
+            for line in file:
+                if match := re.search(r"mood of speech: (.+?),", line):
+                    mood = match.group(1).strip()
+                    student_results["mood"] = 0 if mood == "Showing no emotion" else (8 if mood == "Reading" else 16)
+                elif match := re.search(r"Pronunciation_posteriori_probability_score_percentage= :([\d.]+)", line):
+                    pronunciation_response = float(match.group(1))
+                    score_dict = PRONUNCIATION_SCORES_WITH_MOOD if student_results["mood"] is not None else PRONUNCIATION_SCORES
+                    student_results["pronunciation_score"] = next((v for k, v in score_dict.items() if pronunciation_response >= k), 0)
+                elif match := re.search(r"rate_of_speech= ([\d.]+)", line):
+                    speech_rate = float(match.group(1))
+                    student_results["speech_rate"] = SPEECH_RATE_SCORES.get(speech_rate, (0, 0))[student_results["mood"] is not None]
+                elif match := re.search(r"articulation_rate= ([\d.]+)", line):
+                    articulation_rate = float(match.group(1))
+                    student_results["articulation_rate"] = ARTICULATION_SCORES.get(articulation_rate, (0, 0))[student_results["mood"] is not None]
+                elif match := re.search(r"balance= ([\d.]+)", line):
+                    speaking_ratio = float(match.group(1))
+                    student_results["speaking_ratio"] = SPEAKING_RATIO_SCORES.get(speaking_ratio, (0, 0))[student_results["mood"] is not None]
     except Exception as e:
         print(f"Error reading analysis file: {e}")
         return None
 
     try:
         with open(filler_file_path, 'r') as file:
-            content = file.read()
-
-        if "filler_word_ratio= " in content:
-            start_index = content.find("filler_word_ratio= ") + len("filler_word_ratio= ")
-            filler_word_response = round(float(content[start_index:].split()[0]), 2)
-            if student_results["mood"] == None:
-                if filler_word_response >= 0.97:
-                    student_results["filler_word_ratio"] = 24
-                elif filler_word_response >= 0.95:
-                    student_results["filler_word_ratio"] = 18
-                elif filler_word_response >= 0.90:
-                    student_results["filler_word_ratio"] = 12
-                elif filler_word_response >= 0.85:
-                    student_results["filler_word_ratio"] = 6
-                else:
-                    student_results["filler_word_ratio"] = 0
-            else:
-                if filler_word_response >= 0.97:
-                    student_results["filler_word_ratio"] = 20
-                elif filler_word_response >= 0.95:
-                    student_results["filler_word_ratio"] = 15
-                elif filler_word_response >= 0.90:
-                    student_results["filler_word_ratio"] = 10
-                elif filler_word_response >= 0.85:
-                    student_results["filler_word_ratio"] = 5
-                else:
-                    student_results["filler_word_ratio"] = 0
+            for line in file:
+                if match := re.search(r"filler_word_ratio= ([\d.]+)", line):
+                    filler_word_ratio = float(match.group(1))
+                    student_results["filler_word_ratio"] = next((v[student_results["mood"] is not None] for k, v in FILLER_WORD_SCORES.items() if filler_word_ratio >= k), 0)
     except Exception as e:
         print(f"Error reading filler words file: {e}")
         return None
 
     # Calculate the final grade based on the individual scores
-    if student_results["mood"] == None:
-        student_results["final_grade"] = student_results["pronunciation_score"] + student_results["speech_rate"] + student_results["articulation_rate"] + student_results["speaking_ratio"] + student_results["filler_word_ratio"]
-    else:
-        student_results["final_grade"] = student_results["mood"] + student_results["pronunciation_score"] + student_results["speech_rate"] + student_results["articulation_rate"] + student_results["speaking_ratio"] + student_results["filler_word_ratio"]
+    student_results["final_grade"] = sum(filter(None, student_results.values()))
 
-    # Create the final JSON structure
-    json_data = {"student_results": student_results}
-
-    # Write to JSON file
-    with open(json_file_path, "w") as json_file:
-        json.dump(json_data, json_file, indent=2)
-
-    print(f"JSON file '{json_file_path}' created successfully.")
-    return json_file_path
+    return student_results
