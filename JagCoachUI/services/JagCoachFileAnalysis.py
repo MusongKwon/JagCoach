@@ -63,15 +63,16 @@ def get_elements(file_path):
 
     return output_txt
     
-PRONUNCIATION_SCORES = {95: 24, 90: 21, 80: 18, 75: 12, 70: 6}
-PRONUNCIATION_SCORES_WITH_MOOD = {95: 20, 90: 18, 80: 15, 75: 10, 70: 5}
-SPEECH_RATE_SCORES = {4.0: (12, 10), 3.0: (7, 6)}
-ARTICULATION_SCORES = {5.0: (20, 17), 4.0: (14, 11), 3.0: (6, 5), 6.0: (6, 5)}
-SPEAKING_RATIO_SCORES = {0.8: (20, 17), 0.9: (20, 17), 0.7: (15, 12), 0.6: (10, 8), 1.0: (10, 8), 0.5: (6, 5)}
-FILLER_WORD_SCORES = {0.97: (24, 20), 0.95: (18, 15), 0.90: (12, 10), 0.85: (6, 5)}
+PRONUNCIATION_SCORES = {95: 20, 90: 18, 80: 16, 75: 11, 70: 6}
+PRONUNCIATION_SCORES_WITH_MOOD = {95: 18, 90: 16, 80: 14, 75: 10, 70: 5}
+SPEECH_RATE_SCORES = {4.0: (9, 8), 3.0: (5, 4)}
+ARTICULATION_SCORES = {5.0: (14, 13), 4.0: (9, 8), 3.0: (4, 3), 6.0: (4, 3)}
+SPEAKING_RATIO_SCORES = {0.8: (14, 13), 0.9: (14, 13), 0.7: (10, 9), 0.6: (6, 5), 1.0: (6, 5), 0.5: (3, 2)}
+FILLER_WORD_SCORES = {0.97: (20, 18), 0.95: (15, 14), 0.90: (10, 9), 0.85: (5, 4)}
+EYE_CONTACT_SCORES = {0.8: (17, 15), 0.6: (8, 7)}
+FACIAL_EXPRESSION_SCORES = {0.5: (6, 5), 0.4:(3, 2)}
 
-def get_elements_dictionary():
-
+def get_elements_dictionary(emotion_ratio, eye_contact_ratio):
     upload_folder = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     analysis_file_path = os.path.join(upload_folder, "uploaded_usr_video_analysis.txt")
     filler_file_path = os.path.join(upload_folder, "filler_word_ratio.txt")
@@ -84,6 +85,8 @@ def get_elements_dictionary():
         "articulation_rate": None,
         "speaking_ratio": None,
         "filler_word_ratio": None,
+        "emotion_ratio": None,
+        "eye_contact_ratio": None,
         "final_grade": None
     }
 
@@ -93,7 +96,7 @@ def get_elements_dictionary():
             for line in file:
                 if match := re.search(r"mood of speech: (.+?),", line):
                     mood = match.group(1).strip()
-                    student_results["mood"] = 0 if mood == "Showing no emotion" else (8 if mood == "Reading" else 16)
+                    student_results["mood"] = 0 if mood == "Showing no emotion" else (5 if mood == "Reading" else 10)
                 elif match := re.search(r"Pronunciation_posteriori_probability_score_percentage= :([\d.]+)", line):
                     pronunciation_response = float(match.group(1))
                     score_dict = PRONUNCIATION_SCORES_WITH_MOOD if student_results["mood"] is not None else PRONUNCIATION_SCORES
@@ -120,6 +123,9 @@ def get_elements_dictionary():
     except Exception as e:
         print(f"Error reading filler words file: {e}")
         return None
+    
+    student_results["emotion_ratio"] = next((v[student_results["mood"] is not None] for k, v in FACIAL_EXPRESSION_SCORES.items() if emotion_ratio >= k), 0)
+    student_results["eye_contact_ratio"] = next((v[student_results["mood"] is not None] for k, v in EYE_CONTACT_SCORES.items() if eye_contact_ratio >= k), 0)
 
     # Calculate the final grade based on the individual scores
     student_results["final_grade"] = sum(filter(None, student_results.values()))
