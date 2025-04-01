@@ -63,6 +63,7 @@ def transcribe():
 @main_bp.route("/evaluate", methods=["POST"])
 def evaluate():
     print(f"Evaluate has been summoned")
+    mp4_file = os.path.join(current_app.config["UPLOAD_FOLDER"], "uploaded_usr_video.mp4")
     processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
     try:
         wav_file = max(
@@ -76,7 +77,7 @@ def evaluate():
         txt_file = get_elements(wav_file)
 
         print("Starting Evaluation")
-        evaluation_text = evaluate_speech()
+        evaluation_text = evaluate_speech(mp4_file)
         print("Evaluation complete bossman")
         return jsonify({"evaluation": evaluation_text})
     except Exception as e:
