@@ -1,10 +1,17 @@
 from flask import Blueprint, render_template, request, current_app, jsonify
 import os
-from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements
+from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_elements_dictionary
+from JagCoachUI.services.FaceAnalysis import analyze_face
 from JagCoachUI.services.LLM import evaluate_speech
 from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from JagCoachUI.config import config
+from concurrent.futures import ThreadPoolExecutor
+
+processed_audio_path = ""
+filler_ratio = 0.0
+executor = ThreadPoolExecutor(max_workers=2)
+processing_results = {}
 
 main_bp = Blueprint("main", __name__)
 
@@ -30,7 +37,10 @@ def index():
                 print(f"Error saving file: {e}")
             print(f"Video uploaded successfully: {file_path}")
 
-            processed_audio_path = process_video(file_path)            
+            global processed_audio_path
+            processed_audio_path = process_video(file_path)
+
+            processing_results["face_analysis"] = executor.submit(analyze_face, file_path)
 
             return render_template("index.html", message=f"File '{file.filename}' uploaded successfully!",
                                    file_path=file_path)
@@ -40,19 +50,12 @@ def index():
 @main_bp.route("/transcribe", methods=["POST"])
 def transcribe():
     print(f"Transcribe has been summoned")
-    processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
-
     try:
-        wav_file = max(
-            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
-            key=os.path.getctime
-        )
+        global processed_audio_path
 
-        print("Begin looking for the wav file\n-------------------------")
-        print(f"Found it boss: {wav_file}")
-
-        transcription_text = get_transcript(wav_file)
-        get_filler_word_ratio(transcription_text)
+        transcription_text = get_transcript(processed_audio_path)
+        global filler_ratio
+        filler_ratio = get_filler_word_ratio(transcription_text)
 
         print("Transcription complete bossman")
         return jsonify({"transcription": transcription_text})
@@ -63,21 +66,22 @@ def transcribe():
 @main_bp.route("/evaluate", methods=["POST"])
 def evaluate():
     print(f"Evaluate has been summoned")
-    mp4_file = os.path.join(current_app.config["UPLOAD_FOLDER"], "uploaded_usr_video.mp4")
-    processed_audio_folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "processed_audio")
     try:
-        wav_file = max(
-            [os.path.join(processed_audio_folder, f) for f in os.listdir(processed_audio_folder) if f.endswith(".wav")],
-            key=os.path.getctime
-        )
+        global processed_audio_path
+        global filler_ratio
+        elements = get_elements(processed_audio_path)
+        
+        future = processing_results.get("face_analysis")
+        if future:
+            emotion_ratio, eye_contact_ratio = future.result()
+        else:
+            emotion_ratio, eye_contact_ratio = 0.0, 0.0
 
-        #test()
-        print("Begin looking for the wav file\n-------------------------")
-        print(f"Found it boss: {wav_file}")
-        txt_file = get_elements(wav_file)
+        student_results = get_elements_dictionary(emotion_ratio, eye_contact_ratio, elements, filler_ratio)
+        print(student_results)
 
         print("Starting Evaluation")
-        evaluation_text = evaluate_speech(mp4_file)
+        evaluation_text = evaluate_speech(student_results)
         print("Evaluation complete bossman")
         return jsonify({"evaluation": evaluation_text})
     except Exception as e:
