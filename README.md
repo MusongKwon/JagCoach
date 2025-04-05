@@ -49,7 +49,7 @@ This program also analyzes the presenter visually using the Deepface module.  Fo
 pip install opencv-python dlib numpy mediapipe deepface tf-keras
 ```
 
-You will also need to install CMake on your device.  You can download that here https://cmake.org/download/
+You will also need to install CMake on your device.  You can download that here: https://cmake.org/download/
  
 If you are on Windows you will also need the Visual Studio C++ build tool (2019 or later) on your device.  You can install that here: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
