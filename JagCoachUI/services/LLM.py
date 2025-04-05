@@ -29,7 +29,7 @@ def evaluate_speech(student_results, interactive_mode=False):
             'role': 'system',
             'content': f"""We are evaluating a presentation.
             {student_results_str}
-            Only give a brief feedback for each category.
+            Give a brief feedback for each category.
             """
         },
         {
