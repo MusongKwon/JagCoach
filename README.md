@@ -44,6 +44,16 @@ Run the following command to update it to the lastest version from the GitHub re
 ```sh
 pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git
 ```
+This program also analyzes the presenter visually using the Deepface module.  For this, you will need to run the command below for the Deepface module and its dependencies:
+```sh
+pip install opencv-python dlib numpy mediapipe deepface tf-keras
+```
+
+You will also need to install CMake on your device.  You can download that here https://cmake.org/download/
+ 
+If you are on Windows you will also need the Visual Studio C++ build tool (2019 or later) on your device.  You can install that here: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+
 Lastly, you will need to download the Ollama LLM from the website (https://ollama.com/download), and install its Python package:
 ```sh
 pip install ollama
