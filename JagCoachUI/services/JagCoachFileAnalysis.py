@@ -54,7 +54,6 @@ def get_elements(file_path):
         mysp.myspsr(p, c)
         mysp.myspatc(p, c)
         mysp.myspbala(p, c)
-        mysp.mysppaus(p, c)
     finally:
         sys.stdout = original_stdout
     
@@ -63,13 +62,13 @@ def get_elements(file_path):
 
     return output_txt
     
-PRONUNCIATION_SCORES = {95: 10, 90: 8, 80: 6, 75: 4, 70: 2}
+PRONUNCIATION_SCORES = {100: 10, 95: 9, 90: 8, 80: 6, 75: 4, 70: 2}
 SPEECH_RATE_SCORES = {4.0: 2, 3.0: 1}
-ARTICULATION_SCORES = {5.0: 4, 4.0: 3, 3.0: 2, 6.0: 2}
+ARTICULATION_SCORES = {5.0: 4, 4.0: 2, 3.0: 1, 6.0: 1}
 SPEAKING_RATIO_SCORES = {0.8: 4, 0.9: 4, 0.7: 3, 0.6: 2, 1.0: 2, 0.5: 1}
-FILLER_WORD_SCORES = {0.97: 10, 0.95: 8, 0.90: 6, 0.85: 3}
-EYE_CONTACT_SCORES = {0.85: 10, 0.75: 8, 0.65: 6, 0.55: 3}
-FACIAL_EXPRESSION_SCORES = {0.55: 10, 0.42: 7, 0.4: 4}
+FILLER_WORD_SCORES = {0.98: 10, 0.97: 9, 0.95: 8, 0.90: 6, 0.85: 3, 0.8: 2}
+EYE_CONTACT_SCORES = {0.89: 10, 0.8: 8, 0.75: 7, 0.65: 6, 0.55: 4, 0.5: 2}
+FACIAL_EXPRESSION_SCORES = {0.6: 10, 0.55: 9, 0.5: 8, 0.45: 7, 0.3: 4, 0.2: 2}
 
 def get_elements_dictionary(emotion_ratio, eye_contact_ratio, analysis_file_path, filler_ratio):
     # Initialize the dictionary with None values
@@ -113,8 +112,8 @@ def get_elements_dictionary(emotion_ratio, eye_contact_ratio, analysis_file_path
     # Calculate the final grade based on the individual scores
     score_sum = sum(v for v in student_results.values() if v is not None)
     if student_results["mood"] is not None:
-        student_results["final_grade"] = float(score_sum / 6 * 10)
+        student_results["final_grade"] = int(score_sum / 6 * 10)
     else:
-        student_results["final_grade"] = float(score_sum / 5 * 10)
+        student_results["final_grade"] = int(score_sum / 5 * 10)
 
     return student_results
