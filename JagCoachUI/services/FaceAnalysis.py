@@ -122,7 +122,12 @@ def analyze_face(video_path):
         emotions_list.extend(emotions)
         eye_contact_list.extend(eye_contacts)
 
+        cv2.imshow("Video Analysis", processed_frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
     cap.release()
+    cv2.destroyAllWindows()
 
     c = 0
     for i in range(len(emotions_list) - 1):
