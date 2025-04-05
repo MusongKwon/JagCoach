@@ -44,7 +44,7 @@ Run the following command to update it to the lastest version from the GitHub re
 ```sh
 pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git
 ```
-This program also analyzes the presenter visually using the Deepface module.  For this, you will need to run the command below for the Deepface module and its dependencies:
+This program also analyzes the presenter visually using the DeepFace module.  For this, you will need to run the command below for the DeepFace module and its dependencies:
 ```sh
 pip install opencv-python dlib numpy mediapipe deepface tf-keras
 ```
