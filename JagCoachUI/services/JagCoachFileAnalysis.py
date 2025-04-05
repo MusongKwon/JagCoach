@@ -106,14 +106,14 @@ def get_elements_dictionary(emotion_ratio, eye_contact_ratio, analysis_file_path
         return None
 
     student_results["filler_word_ratio"] = next((v for k, v in FILLER_WORD_SCORES.items() if filler_ratio >= k), 0)
-    student_results["emotion_ratio"] = next((v for k, v in FACIAL_EXPRESSION_SCORES.items() if emotion_ratio >= k), 0)
-    student_results["eye_contact_ratio"] = next((v for k, v in EYE_CONTACT_SCORES.items() if eye_contact_ratio >= k), 0)
+    if emotion_ratio is not None and eye_contact_ratio is not None:
+        student_results["emotion_ratio"] = next((v for k, v in FACIAL_EXPRESSION_SCORES.items() if emotion_ratio >= k), 0)
+        student_results["eye_contact_ratio"] = next((v for k, v in EYE_CONTACT_SCORES.items() if eye_contact_ratio >= k), 0)
 
     # Calculate the final grade based on the individual scores
-    score_sum = sum(v for v in student_results.values() if v is not None)
-    if student_results["mood"] is not None:
-        student_results["final_grade"] = int(score_sum / 6 * 10)
-    else:
-        student_results["final_grade"] = int(score_sum / 5 * 10)
+    non_none_values = [v for v in student_results.values() if v is not None]
+    count = len(non_none_values)
+    score_sum = sum(non_none_values)
+    student_results["final_grade"] = int(score_sum / count * 10)
 
     return student_results
