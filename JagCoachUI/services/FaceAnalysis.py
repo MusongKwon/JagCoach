@@ -129,6 +129,9 @@ def analyze_face(video_path):
     cap.release()
     cv2.destroyAllWindows()
 
+    if not emotions_list or not eye_contact_list:
+        return None, None
+
     c = 0
     for i in range(len(emotions_list) - 1):
         if emotions_list[i+1] != emotions_list[i]:
