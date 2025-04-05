@@ -97,7 +97,7 @@ def capture_frames(cap, input_queue, frame_skip=15):
 
     cap.release()
 
-def process_video(video_path):
+def analyze_face(video_path):
     """Process the video and analyze face emotions and gaze"""
     cap = cv2.VideoCapture(video_path)
     analyzer = FaceAnalyzer()
