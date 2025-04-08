@@ -19,6 +19,7 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        # Get the video file
         file = request.files.get("video_file")
         if file:
             upload_folder = current_app.config["UPLOAD_FOLDER"]
@@ -37,6 +38,7 @@ def index():
                 print(f"Error saving file: {e}")
             print(f"Video uploaded successfully: {file_path}")
 
+            #  Process the video file for auditory and facial analysis
             global processed_audio_path
             processed_audio_path = process_video(file_path)
 
@@ -53,6 +55,7 @@ def transcribe():
     try:
         global processed_audio_path
 
+        # Transcribe the audio to calculate filler ratio
         transcription_text = get_transcript(processed_audio_path)
         global filler_ratio
         filler_ratio = get_filler_word_ratio(transcription_text)
@@ -67,6 +70,7 @@ def transcribe():
 def evaluate():
     print(f"Evaluate has been summoned")
     try:
+        # Calculate the auditory analysis metrics
         global processed_audio_path
         global filler_ratio
         elements = get_elements(processed_audio_path)

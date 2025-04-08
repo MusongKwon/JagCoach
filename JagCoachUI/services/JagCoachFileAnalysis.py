@@ -11,6 +11,7 @@ def process_video(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File '{file_path}' not found.")
 
+    # Create file name for processed audio file
     output_dir = os.path.join(os.getcwd(), config.UPLOAD_FOLDER, "processed_audio")
     base_name = os.path.splitext(os.path.basename(file_path))[0]
     output_path = os.path.join(output_dir, base_name + ".wav")
@@ -61,7 +62,8 @@ def get_elements(file_path):
         f.write(output_capture.getvalue())
 
     return output_txt
-    
+
+# Define grading weights for speech attributes
 PRONUNCIATION_SCORES = {100: 10, 95: 9, 90: 8, 80: 6, 75: 4, 70: 2}
 SPEECH_RATE_SCORES = {4.0: 2, 3.0: 1}
 ARTICULATION_SCORES = {5.0: 4, 4.0: 2, 3.0: 1, 6.0: 1}

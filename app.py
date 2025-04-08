@@ -6,7 +6,6 @@ app = Flask(__name__, template_folder="JagCoachUI/templates", static_folder="Jag
 
 # Load configurations
 app.config.from_object(config)
-
 app.config["UPLOAD_FOLDER"] = "uploads"
 
 # Register routes

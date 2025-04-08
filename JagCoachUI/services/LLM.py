@@ -2,9 +2,11 @@ from ollama import chat
 from ollama import ChatResponse
 
 def evaluate_speech(student_results, interactive_mode=False):
-    
+
+    # Initialize final grade message
     final_grade = f"You scored a {student_results['final_grade']} out of a 100!\n"
 
+    # Get the student results, if no mood detected, exclude the mood metric
     if student_results['mood'] is None:
         student_results_str = f"""{{
             pronunciation score: {student_results['pronunciation_score']} out of 10,
