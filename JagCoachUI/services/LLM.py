@@ -1,8 +1,8 @@
 from ollama import chat
 from ollama import ChatResponse
 
+
 def evaluate_speech(student_results, interactive_mode=False):
-    
     final_grade = f"You scored a {student_results['final_grade']} out of a 100!\n"
 
     if student_results['mood'] is None:

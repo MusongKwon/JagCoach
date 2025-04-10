@@ -7,6 +7,7 @@ from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from JagCoachUI.config import config
 from concurrent.futures import ThreadPoolExecutor
+import re
 
 processed_audio_path = ""
 filler_ratio = 0.0
@@ -46,19 +47,39 @@ def index():
                                    file_path=file_path)
     return render_template("index.html", message=None)
 
+# This portion will help restructure the format of the transcript look
 
+def split_transcription(text):
+    sentences = re.split(r'(?<=[.?!])\s+', text.strip())
+    return [s.strip() for s in sentences if s.strip()]
+
+def get_transcript_metadata(text):
+    sentences = split_transcription(text)
+    return {
+        "line_count": len(sentences),
+        "word_count": len(text.split())
+    }
+
+# Below I added the lines to add the above implementation to format the transcript.
 @main_bp.route("/transcribe", methods=["POST"])
 def transcribe():
-    print(f"Transcribe has been summoned")
+    print("Transcribe has been summoned")
     try:
         global processed_audio_path
-
         transcription_text = get_transcript(processed_audio_path)
+
+        sentences = split_transcription(transcription_text)
+        metadata = get_transcript_metadata(transcription_text)
+
         global filler_ratio
         filler_ratio = get_filler_word_ratio(transcription_text)
 
         print("Transcription complete bossman")
-        return jsonify({"transcription": transcription_text})
+        return jsonify({
+            "lines": sentences,
+            "metadata": metadata,
+            "filler_ratio": filler_ratio
+        })
     except Exception as e:
         print(f"Error processing audio file: {e}")
         return jsonify({"error": str(e)}), 500
@@ -70,7 +91,7 @@ def evaluate():
         global processed_audio_path
         global filler_ratio
         elements = get_elements(processed_audio_path)
-        
+
         future = processing_results.get("face_analysis")
         if future:
             emotion_ratio, eye_contact_ratio = future.result()
