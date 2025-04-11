@@ -1,5 +1,5 @@
 # JagCoach
-JagCoach is an AI-assisted coaching platform for presentations (made by Musong Kwon, Caleb Holt, Jesus Lopez, Reyden Rodriguez, Talia Ortiz, and Syrus Redhouse).  This application was made for students who hope to improve their class presentations and develop stronger public speaking skills.
+JagCoach is an AI-assisted coaching platform for presentations (made by Musong Kwon, Caleb Holt, Jesus Lopez, Reyden Rodriguez, and Syrus Redhouse).  This application was made for students who hope to improve their class presentations and develop stronger public speaking skills.
 
 
 ## Approach
