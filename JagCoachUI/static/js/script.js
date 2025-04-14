@@ -3,16 +3,14 @@ document.getElementById("fileInput").addEventListener("change", function () {
     const transcriptResult = document.getElementById("transcriptResult");
     const loadSpinner = document.getElementById("loadSpinner");
     const toggleButton = document.getElementById("toggleButton");
-    const ellipsis = document.getElementById("ellipsis");
     let originalText = transcriptResult.textContent;
     const evaluationResult = document.getElementById("evaluationResult");
     const evaluationSpinner = document.getElementById("evaluationSpinner");
 
-    // Show the loading spinner and update the text for trascription
+    // Show loading spinners
     transcriptResult.textContent = "Processing transcription...";
     loadSpinner.style.display = "block";
 
-    // Show the loading spinner and update the text for evaluation
     evaluationResult.textContent = "Examining presentation...";
     evaluationSpinner.style.display = "block";
 
@@ -74,3 +72,22 @@ document.getElementById("fileInput").addEventListener("change", function () {
         });
     }
 });
+
+
+// A simple function that allows the user to hide and show the transcript.
+
+function toggleTranscript() {
+    const transcriptContainer = document.getElementById("transcriptContainer");
+    const toggleButton = document.getElementById("toggleButton");
+    const ellipsis = document.getElementById("ellipsis");
+
+    transcriptContainer.classList.toggle("hidden");
+
+    if (transcriptContainer.classList.contains("hidden")) {
+        toggleButton.textContent = "Show Transcript";
+        ellipsis.style.display = "block";
+    } else {
+        toggleButton.textContent = "Hide Transcript";
+        ellipsis.style.display = "none";
+    }
+}
