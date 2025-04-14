@@ -1,45 +1,74 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JagCoach</title>
 
-{% block title %}JagCoach - Home{% endblock %}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
-{% block content %}
-    <h2>Please choose an MP4 video presentation from your files to analyze. ☺</h2>
+<body>
+  <header class="border-b py-4 px-6 flex justify-between items-center" style="border-color: #2a2a2a;">
+    <div class="flex items-center gap-2">
+      <img src="{{ url_for('static', filename='images/jaguar-head.png') }}" alt="Jaguar Logo" class="w-10 h-10" />
+      <h1>JagCoach</h1>
+    </div>
+    <span style="color: #888888; font-size: 14px;">Senior Project Spring 2025</span>
+  </header>
 
-    <div class="file-frame">
-        <input type="file" id="fileInput" class="hidden-file-input" accept="video/*">
-        <button class="file-button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
-        <p id="fileName" style="color: white; margin-top: 10px;"></p>
+  <section class="max-w-3xl mx-auto text-center px-4 py-12">
+    <h2>AI Coaching for Oral Presentations</h2>
+    <p style="color: #cccccc; margin-top: 0.5rem;">Upload your MP4 file to begin evaluation.</p>
+    <label for="fileInput" class="button mt-6 inline-block">Upload Video</label>
+    <input type="file" id="fileInput" class="hidden" accept="video/mp4" />
+    <p id="fileName" class="text-sm text-green-400 mt-2 italic"></p>
+  </section>
+
+  <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-6 pb-12">
+
+    <!-- This is the Video Preview. Just shows the uploaded video. Was thinking of somehow adding a thumbnail to it
+    form the video the user uploads. -->
+    <div class="panel">
+      <h3>Video Preview</h3>
+      <video id="vPlayback" controls>
+        <source src="" type="video/mp4" />
+        Your browser doesn't support video.
+      </video>
     </div>
 
-    {% if message %}
-        <div class="upload-message">
-            <p>{{ message }}</p>
-            <p>File saved at: {{ file_path }}</p>
-        </div>
-    {% endif %}
-
-    <div id="img">
-        <img src="{{ url_for('static', filename='images/jaguar-head.png') }}" alt="Jaguar Logo" width="100" height="100">
-    </div>
-
-    <video id="vPlayback" width="320" height="240" controls>
-        <source src="" type="video/mp4">
-    </video>
-
-    <h3 id="evaluationTitle">Our Evaluation</h3>
-    <div id="evaluationContainer">
-        <p id="evaluationResult">Upload Presentation to Receive Evaluation</p>
+    <!-- The Evaluation Portion. Holds the output of the evaluation. -->
+    <div class="panel" id="evaluationContainer">
+      <h3>Evaluation</h3>
+      <p id="evaluationResult">Upload a video to begin analysis.</p>
+      <div class="evaluation-loader-wrapper">
         <div id="evaluationSpinner" class="loader hidden"></div>
+      </div>
     </div>
 
-    <div id="transcriptControls">
-        <button id="toggleButton">Toggle Transcription</button>
+    <!-- The Transcript Portion. Holds the container to show the transcript. -->
+    <div class="md:col-span-2 panel">
+      <div class="flex justify-between items-center">
+        <h3>Transcript</h3>
+        <button id="toggleButton" onclick="toggleTranscript()">Show Transcript</button>
+      </div>
+      <div id="transcriptContainer" class="hidden">
+        <p id="transcriptResult">Upload a video to begin transcription.</p>
+        <p id="ellipsis">. . .</p>
+        <div class="transcript-loader-wrapper">
+          <div id="loadSpinner" class="loader hidden"></div>
+        </div>
+      </div>
     </div>
 
-    <h3 id="transcriptTitle">Transcription Output:</h3>
-    <div id="transcriptContainer">
-        <p id="transcriptResult">Upload Video to Transcribe</p>
-        <p id="ellipsis" style="display:none;">. . .</p>
-        <div id="loadSpinner" class="loader hidden"></div>
-    </div>
-{% endblock %}
+  </main>
+
+  <footer class="border-t py-4 text-center text-sm" style="border-color: #2a2a2a; color: #888888;">
+    &copy; 2025 JagCoach — Built by Musong, Reyden, Jesus, Caleb, & Redhouse.
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
