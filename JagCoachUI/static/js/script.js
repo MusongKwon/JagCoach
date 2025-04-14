@@ -40,15 +40,7 @@ document.getElementById("fileInput").addEventListener("change", function () {
             originalText = transcription.transcription || "No transcription found.";
             transcriptResult.textContent = originalText;
             loadSpinner.style.display = "none";
-            toggleButton.onclick = function() {
-                if (transcriptResult.style.display === "none") {
-                    transcriptResult.style.display = "block";
-                    ellipsis.style.display = "none"; // Hide ellipsis
-                } else {
-                    transcriptResult.style.display = "none";
-                    ellipsis.style.display = "block"; // Show ellipsis
-                }
-            };
+            toggleButton.onclick = toggleTranscript;
 
             // call /evaluate endpoint
             return fetch("/evaluate", { method: "POST" });
