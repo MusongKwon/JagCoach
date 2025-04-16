@@ -1,4 +1,5 @@
 import whisper
+import re
 
 def get_transcript(wavPath):
     # Load the whisper model, transcribe the wav file, and return the text
