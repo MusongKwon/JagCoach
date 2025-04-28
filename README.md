@@ -75,3 +75,6 @@ Note: Ollama should be running in the background as JagCoach is running.
 Below is what this branch currently looks like - Redhouse:
 <img width="1512" alt="Screenshot 2025-04-10 at 4 40 02 PM" src="https://github.com/user-attachments/assets/46e2f6db-b66e-4b58-bddf-685097b20245" />
 
+SECOND UPDATE THIS IS THE USER PROFILE (Mock data for visuals):
+![image](https://github.com/user-attachments/assets/47a06697-31ab-4d00-a830-3c3959e0b0ec)
+
