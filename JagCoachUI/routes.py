@@ -16,8 +16,10 @@ processing_results = {}
 
 main_bp = Blueprint("main", __name__)
 
+
 @main_bp.route("/", methods=["GET", "POST"])
 @main_bp.route("/", methods=["GET", "POST"])
+
 def index():
     if request.method == "POST":
         file = request.files.get("video_file")
@@ -47,11 +49,13 @@ def index():
                                    file_path=file_path)
     return render_template("index.html", message=None)
 
+
 # This portion will help restructure the format of the transcript look
 
 def split_transcription(text):
     sentences = re.split(r'(?<=[.?!])\s+', text.strip())
     return [s.strip() for s in sentences if s.strip()]
+
 
 def get_transcript_metadata(text):
     sentences = split_transcription(text)
@@ -59,6 +63,7 @@ def get_transcript_metadata(text):
         "line_count": len(sentences),
         "word_count": len(text.split())
     }
+
 
 # Below I added the lines to add the above implementation to format the transcript.
 @main_bp.route("/transcribe", methods=["POST"])
@@ -84,6 +89,9 @@ def transcribe():
         print(f"Error processing audio file: {e}")
         return jsonify({"error": str(e)}), 500
 
+
+
+# Strictly mock data. This will change once a database is added.
 @main_bp.route("/evaluate", methods=["POST"])
 def evaluate():
     print(f"Evaluate has been summoned")
@@ -108,3 +116,48 @@ def evaluate():
     except Exception as e:
         print(f"Error processing audio file: {e}")
         return jsonify({"error": str(e)}), 500
+
+@main_bp.route("/profile")
+def profile():
+    class DummyUser:
+        username = "Redhouse"
+        email = "redhouse@example.com"
+
+    dummy_history = [
+        {"date": "2025-04-27", "final_grade": 90, "id": 1, "word_count": 1200, "video_length": "9:24",
+         "highlight_feedback": "Strong delivery, clear pronunciation.", "video_title": "Final Project Presentation"},
+        {"date": "2025-04-20", "final_grade": 85, "id": 2, "word_count": 950, "video_length": "7:15",
+         "highlight_feedback": "Good effort, needs better pacing and eye contact.",
+         "video_title": "Practice Session 1"},
+
+        # Just duplicate or make variations
+        {"date": "2025-04-15", "final_grade": 78, "id": 3, "word_count": 870, "video_length": "8:03",
+         "highlight_feedback": "Speech rate was too fast.", "video_title": "Mid-Term Update"},
+        {"date": "2025-04-10", "final_grade": 92, "id": 4, "word_count": 1300, "video_length": "10:12",
+         "highlight_feedback": "Excellent use of pauses and facial expression.", "video_title": "Demo Day Pitch"},
+        {"date": "2025-04-05", "final_grade": 88, "id": 5, "word_count": 1100, "video_length": "8:50",
+         "highlight_feedback": "Minor pronunciation issues.", "video_title": "Weekly Team Update"},
+        {"date": "2025-04-01", "final_grade": 76, "id": 6, "word_count": 900, "video_length": "7:30",
+         "highlight_feedback": "Good energy but rushed ending.", "video_title": "Introductory Speech"},
+        {"date": "2025-03-28", "final_grade": 83, "id": 7, "word_count": 950, "video_length": "7:55",
+         "highlight_feedback": "Good structure, filler words used.", "video_title": "Module Review"},
+        {"date": "2025-03-22", "final_grade": 80, "id": 8, "word_count": 890, "video_length": "7:40",
+         "highlight_feedback": "Clear articulation but pacing varied.", "video_title": "First Presentation"},
+        {"date": "2025-04-15", "final_grade": 78, "id": 3, "word_count": 870, "video_length": "8:03",
+         "highlight_feedback": "Speech rate was too fast.", "video_title": "Mid-Term Update"},
+        {"date": "2025-04-10", "final_grade": 92, "id": 4, "word_count": 1300, "video_length": "10:12",
+         "highlight_feedback": "Excellent use of pauses and facial expression.", "video_title": "Demo Day Pitch"},
+        {"date": "2025-04-05", "final_grade": 88, "id": 5, "word_count": 1100, "video_length": "8:50",
+         "highlight_feedback": "Minor pronunciation issues.", "video_title": "Weekly Team Update"},
+        {"date": "2025-04-01", "final_grade": 76, "id": 6, "word_count": 900, "video_length": "7:30",
+         "highlight_feedback": "Good energy but rushed ending.", "video_title": "Introductory Speech"},
+        {"date": "2025-03-28", "final_grade": 83, "id": 7, "word_count": 950, "video_length": "7:55",
+         "highlight_feedback": "Good structure, filler words used.", "video_title": "Module Review"},
+        {"date": "2025-03-22", "final_grade": 80, "id": 8, "word_count": 890, "video_length": "7:40",
+         "highlight_feedback": "Clear articulation but pacing varied.", "video_title": "First Presentation"},
+    ]
+    return render_template(
+        "profile.html",
+        user=DummyUser(),
+        history=dummy_history
+    )
