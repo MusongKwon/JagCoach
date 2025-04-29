@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}JagCoach – Profile{% endblock %}
+
+{% block content %}
+<div class="flex">
+
+  <!-- Sidebar (LEFT) -->
+  <div class="w-64 min-h-screen bg-[#121212] flex flex-col p-6">
+
+    <!-- Navigation Links -->
+    <div class="flex flex-col space-y-6">
+      <a href="{{ url_for('main.profile') }}" class="text-gray-400 hover:text-white font-semibold">
+        Upload Presentation
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Main Content (RIGHT) -->
+  <div class="flex-1 p-12">
+
+    <!-- Row: Profile Card + Presentation History Heading -->
+    <div class="flex gap-8 items-start mb-8">
+
+      <!-- Profile Card -->
+      <div class="glass-card w-80 h-auto flex flex-col items-center p-8">
+        <div class="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center text-3xl text-gray-300 ring-2 ring-[#702E3D] mb-4">
+          {{ user.username[:1] | upper }}
+        </div>
+        <p class="text-2xl font-bold text-white mb-2">{{ user.username }}</p>
+        <p class="text-sm text-gray-400 mb-6">{{ user.email }}</p>
+
+        <!-- Profile Option/Actions -->
+        <div class="flex flex-col space-y-2 w-full">
+          <a href="javascript:void(0);" onclick="openEditProfile()"
+               class="block w-full bg-[#702E3D] hover:bg-[#B31942] text-white text-sm font-semibold rounded-md py-2 text-center transition">
+              Edit Profile
+          </a>
+
+          <a href="{{ url_for('main.logout') }}" class="block w-full bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-md py-2 text-center transition">
+            Logout
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Presentation History Heading and Presentation Eval Cards -->
+      <div class="flex-1">
+        <h2 class="text-2xl font-bold text-white mb-6">Presentation History</h2>
+
+        <!-- History Cards -->
+        {% if history %}
+        <div class="flex flex-wrap gap-8">
+          {% for item in history %}
+          <div class="glass-card w-64 h-96 flex flex-col justify-between p-6 transition-transform hover:scale-105">
+            <div>
+
+              {% if item.video_title %}
+              <p class="text-sm font-semibold text-white truncate" title="{{ item.video_title }}">
+                {{ item.video_title }}
+              </p>
+              {% endif %}
+
+              <p class="text-xs text-gray-400 mt-1">{{ item.date }}</p>
+
+              <p class="text-4xl font-bold text-white mt-2">
+                {{ item.final_grade }}<span class="text-sm text-gray-400">/100</span>
+              </p>
+
+              {% if item.word_count %}
+              <p class="text-sm text-gray-400 mt-4">
+                Word Count: <span class="text-white font-semibold">{{ item.word_count }}</span>
+              </p>
+              {% endif %}
+
+              {% if item.video_length %}
+              <p class="text-sm text-gray-400 mt-2">
+                Video Length: <span class="text-white">{{ item.video_length }}</span>
+              </p>
+              {% endif %}
+
+              {% if item.highlight_feedback %}
+              <p class="text-sm text-gray-400 mt-2">
+                Feedback: <span class="text-white">{{ item.highlight_feedback }}</span>
+              </p>
+              {% endif %}
+
+            </div>
+
+            <!-- Buttons -->
+              <a href="{{ item.video_url }}" target="_blank"
+                 class="block bg-[#702E3D] hover:bg-[#B31942] text-white text-sm font-semibold rounded-md py-2 text-center transition">
+                  View
+              </a>
+
+
+              <button onclick="deleteUpload('{{ item.id }}', this)"
+                 class="block bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-md py-2 text-center transition">
+                Delete
+              </button>
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p class="text-gray-500 italic">No presentations yet.</p>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Firebase SDKs first -->
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+
+<!-- Your Firebase config (initializes Firebase) -->
+<script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+
+<!-- Your actual app logic -->
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+<!-- Edit Profile Modal (Hidden by Default) -->
+<div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-[#1F1F1F] p-6 rounded-lg w-96 flex flex-col space-y-4">
+    <h2 class="text-xl font-bold text-white">Edit Profile</h2>
+
+    <input id="newUsername" type="text" placeholder="New Username" class="p-2 rounded bg-[#2C2C2C] text-white">
+    <input id="profilePicUpload" type="file" accept="image/*" class="p-2 text-white">
+
+    <div class="flex justify-end space-x-4">
+      <button onclick="closeEditProfile()" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
+        Cancel
+      </button>
+      <button onclick="saveProfileChanges()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">
+        Save
+      </button>
+    </div>
+  </div>
+</div>

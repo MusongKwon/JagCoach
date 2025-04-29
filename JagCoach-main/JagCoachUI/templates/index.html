@@ -1,0 +1,65 @@
+
+{% extends "base.html" %}
+{% block title %}JagCoach – Home{% endblock %}
+
+{% block content %}
+  <section class="max-w-3xl mx-auto text-center px-4 py-12">
+    <h2>AI Coaching for Oral Presentations</h2>
+    <p class="text-gray-400 mt-2">
+      Upload your MP4 file to begin evaluation.
+    </p>
+    <label for="fileInput" class="button mt-6 inline-block">Upload Video</label>
+    <input type="file" id="fileInput" class="hidden" accept="video/mp4" />
+    <p id="fileName" class="text-sm text-green-400 mt-2 italic"></p>
+  </section>
+
+ <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-6 pb-12">
+    <!-- Video Preview -->
+    <div class="panel">
+      <h3>Video Preview</h3>
+      <video id="vPlayback" controls>
+        <source src="" type="video/mp4" />
+        Your browser doesn’t support video.
+      </video>
+    </div>
+
+    <!-- Evaluation -->
+    <div class="panel" id="evaluationContainer">
+      <h3>Evaluation</h3>
+      <p id="evaluationResult">Upload a video to begin analysis.</p>
+      <div class="evaluation-loader-wrapper">
+        <div id="evaluationSpinner" class="loader hidden"></div>
+      </div>
+    </div>
+
+    <!-- Transcript -->
+    <div class="md:col-span-2 panel">
+      <div class="flex justify-between items-center">
+        <h3>Transcript</h3>
+        <button id="toggleButton" onclick="toggleTranscript()">Show Transcript</button>
+      </div>
+      <div id="transcriptContainer" class="hidden">
+        <p id="transcriptResult">Upload a video to begin transcription.</p>
+        <p id="ellipsis">. . .</p>
+        <div class="transcript-loader-wrapper">
+          <div id="loadSpinner" class="loader hidden"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+
+
+{% block scripts %}
+  <!-- Firebase SDKs first -->
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+
+<!-- Your Firebase config (initializes Firebase) -->
+<script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+
+<!-- Your actual app logic -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
