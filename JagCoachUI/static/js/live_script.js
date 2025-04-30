@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             videoElement.srcObject = mediaStream;
+            videoElement.style.transform = "scaleX(-1)";
     
             mediaRecorder = new MediaRecorder(mediaStream, { mimeType: "video/webm;codecs=vp8,opus" });
             
