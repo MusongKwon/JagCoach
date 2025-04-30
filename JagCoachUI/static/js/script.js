@@ -7,7 +7,6 @@ document.getElementById("fileInput").addEventListener("change", function () {
     const evaluationResult = document.getElementById("evaluationResult");
     const evaluationSpinner = document.getElementById("evaluationSpinner");
 
-    // Show loading spinners
     transcriptResult.textContent = "Processing transcription...";
     loadSpinner.style.display = "block";
 
@@ -42,7 +41,6 @@ document.getElementById("fileInput").addEventListener("change", function () {
             loadSpinner.style.display = "none";
             toggleButton.onclick = toggleTranscript;
 
-            // call /evaluate endpoint
             return fetch("/evaluate", { method: "POST" });
         })
         .then(response => response.json())
@@ -53,20 +51,15 @@ document.getElementById("fileInput").addEventListener("change", function () {
         .catch(error => {
             console.error("Upload/Transcription Error:", error);
             transcriptResult.textContent = "Error in transcription.";
-            loadSpinner.style.display = "none";
-        })
-        .catch(error => {
-            console.error("Evaluation Error:", error);
             evaluationResult.textContent = "Error in evaluation.";
+            loadSpinner.style.display = "none";
+            evaluationSpinner.style.display = "none";
         })
         .finally(() => {
             evaluationSpinner.style.display = "none";
         });
     }
 });
-
-
-// A simple function that allows the user to hide and show the transcript.
 
 function toggleTranscript() {
     const transcriptContainer = document.getElementById("transcriptContainer");
