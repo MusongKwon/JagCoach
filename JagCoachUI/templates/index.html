@@ -1,43 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JagCoach</title>
+{% extends "base.html" %}
+{% block title %}JagCoach – Home{% endblock %}
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-
-<body>
-  <header class="border-b py-4 px-6 flex justify-between items-center" style="border-color: #2a2a2a;">
-    <div class="flex items-center gap-2">
-      <img src="{{ url_for('static', filename='images/jaguar-head.png') }}" alt="Jaguar Logo" class="w-10 h-10" />
-      <h1>JagCoach</h1>
-    </div>
-    <span style="color: #888888; font-size: 14px;">Senior Project Spring 2025</span>
-  </header>
-
+{% block content %}
   <section class="max-w-3xl mx-auto text-center px-4 py-12">
     <h2>AI Coaching for Presentations</h2>
-    <p style="color: #cccccc; margin-top: 0.5rem;">Upload your MP4 file to begin evaluation.</p>
+    <p class="text-gray-400 mt-2">
+      Upload your MP4 file to begin evaluation.
+    </p>
     <label for="fileInput" class="button mt-6 inline-block">Upload Video</label>
     <input type="file" id="fileInput" class="hidden" accept="video/mp4" />
-    <a href="/present-live" class="button mt-6 inline-block">Present Live</a>
+      <a href="/present-live" class="button mt-6 inline-block">Present Live</a>
     <p id="fileName" class="text-sm text-green-400 mt-2 italic"></p>
   </section>
 
-  <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-6 pb-12">
-
+ <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-6 pb-12">
+    <!-- Video Preview -->
     <div class="panel">
       <h3>Video Preview</h3>
       <video id="vPlayback" controls>
         <source src="" type="video/mp4" />
-        Your browser doesn't support video.
+        Your browser doesn’t support video.
       </video>
     </div>
 
+    <!-- Evaluation -->
     <div class="panel" id="evaluationContainer">
       <h3>Evaluation</h3>
       <p id="evaluationResult">Upload a video to begin analysis.</p>
@@ -46,6 +32,7 @@
       </div>
     </div>
 
+    <!-- Transcript -->
     <div class="md:col-span-2 panel">
       <div class="flex justify-between items-center">
         <h3>Transcript</h3>
@@ -59,13 +46,19 @@
         </div>
       </div>
     </div>
-
   </main>
+{% endblock %}
 
-  <footer class="border-t py-4 text-center text-sm" style="border-color: #2a2a2a; color: #888888;">
-    &copy; 2025 JagCoach — Built by Musong, Reyden, Jesus, Caleb, & Redhouse.
-  </footer>
+{% block scripts %}
+  <!-- Firebase SDKs first -->
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
 
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+<!-- Your Firebase config (initializes Firebase) -->
+<script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+
+<!-- Your actual app logic -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
