@@ -4,40 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}JagCoach{% endblock %}</title>
+
   <script>
+    // disable Tailwind’s preflight so our custom styles aren’t overridden
     tailwind.config = {
       corePlugins: { preflight: false }
     }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Google Fonts + global styles -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style_pf.css') }}">
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="border-b py-4 px-6 flex justify-between items-center" style="border-color: #2a2a2a;">
+  <!-- HEADER -->
+  <header class="border-b border-[#2a2a2a] bg-[#702E3D] text-white py-4 px-6 flex items-center justify-between relative">
     <div class="flex items-center gap-2">
       <img src="{{ url_for('static', filename='images/jaguar-head.png') }}"
            alt="Jaguar Logo" class="w-10 h-10" />
-      <h1>JagCoach</h1>
+      <h1 class="text-2xl font-bold">JagCoach</h1>
     </div>
-    <span style="color: #888888; font-size: 14px;">Senior Project Spring 2025</span>
+
+    <!-- centered title -->
+    <span class="absolute left-1/2 transform -translate-x-1/2 text-gray-300 text-sm">
+      Senior Project Spring 2025
+    </span>
+
+    {# only show Home/Profile when not on auth routes #}
+    {% if request.endpoint not in ['main.auth', 'main.session_login'] %}
     <nav class="space-x-4">
-      <a href="{{ url_for('main.index') }}" class="{% if request.endpoint=='main.index' %}font-semibold{% endif %} text-gray-400 hover:text-white">Home</a>
-      <a href="{{ url_for('main.profile') }}" class="{% if request.endpoint=='main.profile' %}font-semibold{% endif %} text-gray-400 hover:text-white">Profile</a>
+      <a href="{{ url_for('main.index') }}"
+         class="text-gray-300 hover:text-white {% if request.endpoint=='main.index' %}font-semibold{% endif %}">
+        Home
+      </a>
+      <a href="{{ url_for('main.profile') }}"
+         class="text-gray-300 hover:text-white {% if request.endpoint=='main.profile' %}font-semibold{% endif %}">
+        Profile
+      </a>
     </nav>
+    {% endif %}
   </header>
 
-  <!-- Page Content -->
+  <!-- PAGE CONTENT -->
   <main class="flex-1">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t py-4 text-center text-sm" style="border-color: #2a2a2a; color: #888888;">
+  <!-- FOOTER -->
+  <footer class="border-t border-[#2a2a2a] bg-[#702E3D] text-white text-center py-3 text-sm">
     &copy; 2025 JagCoach — Built by Musong, Reyden, Caleb, & Redhouse.
   </footer>
 

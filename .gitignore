@@ -1,22 +1,39 @@
-# Ignore virtual environment
-.venv/
+# ───── Python artifacts ─────
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
 
-# Ignore media uploads and output files
+# ───── OS & Editor temp files ─────
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# ───── Uploaded media & audio processing ─────
 uploads/
+uploads/**/*
+JagCoachUI/uploads/
 *.mp4
 *.wav
 *.TextGrid
 *.praat
 
-# Ignore Whisper models and assets
+# ───── Whisper / ML artifacts ─────
 *.pt
 *.onnx
 *.tiktoken
 *.npz
 
-# OS and editor metadata
-.DS_Store
-.idea/
-.vscode/
+# ───── Firebase admin SDK creds ─────
+secrets/
+firebase/firebase-creds.json
+firebase/firebase-adminsdk.json
+
+# ───── Client-side Firebase config ─────
+JagCoachUI/static/js/firebase-config.js
+
+#  e.g. local test output, logs, etc.
+*.log

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}JagCoach – Login{% endblock %}
+
+{% block content %}
+  <div
+    class="flex justify-center items-center"
+    style="height: calc(100vh - 10rem /*header*/ - 3.5rem /*footer*/);"
+  >
+    <div class="glass-card w-full max-w-md p-12">
+      <h2 class="text-3xl font-bold text-white mb-8 text-center">
+        Welcome to JagCoach
+      </h2>
+
+      <form id="authForm" class="space-y-6">
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-300">
+            Email address
+          </label>
+          <input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            class="mt-1 block w-full rounded-md bg-[#111111] border border-gray-600 placeholder-gray-500 text-white py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#702E3D]"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-300">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            class="mt-1 block w-full rounded-md bg-[#111111] border border-gray-600 placeholder-gray-500 text-white py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#702E3D]"
+          />
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6">
+          <button
+            type="button"
+            id="loginBtn"
+            class="button flex-1 py-3 text-lg"
+          >
+            Log In
+          </button>
+          <button
+            type="button"
+            id="signupBtn"
+            class="button bg-gray-700 hover:bg-gray-600 flex-1 py-3 text-lg"
+          >
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Error / Success Message -->
+        <p id="authMessage"
+           class="mt-4 text-sm text-red-500 min-h-[1.25rem] text-center">
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

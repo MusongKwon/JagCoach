@@ -93,12 +93,11 @@
                 View
               </a>
 
-              <!-- Delete Form That doesnt work just yet. No database implemented or built.-->
-              <form action="{{ url_for('main.evaluate', presentation_id=item.id) }}" method="POST">
-                <button type="submit" class="block w-full text-red-400 hover:text-red-600 text-xs font-semibold text-center transition">
-                  Delete
-                </button>
-              </form>
+              <!-- Delete Form That works. I give it a 80% of the time.-->
+              <button type="button" onclick="deleteUpload('{{ item.id }}', this)"
+                      class="text-red-400 hover:text-red-600 text-xs font-semibold text-center transition">
+                Delete
+              </button>
             </div>
 
           </div>
@@ -115,4 +114,6 @@
   </div>
 
 </div>
+ <!-- THIS NEEDS TO BE HERE for profile.js to run -->
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
