@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JagCoach</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <header class="border-b py-4 px-6 flex justify-between items-center" style="border-color: #2a2a2a;">
+    <div class="flex items-center gap-2">
+      <img src="{{ url_for('static', filename='images/jaguar-head.png') }}" alt="Jaguar Logo" class="w-10 h-10" />
+      <h1>JagCoach</h1>
+    </div>
+    <span style="color: #888888; font-size: 14px;">Senior Project Spring 2025</span>
+  </header>
+
+  <section class="max-w-3xl mx-auto text-center px-4 py-12">
+    <h2>AI Coaching for Presentations</h2>
+    <p style="color: #cccccc; margin-top: 0.5rem;">Upload your MP4 file to begin evaluation.</p>
+    <a href="/upload-video" class="button mt-6 inline-block">Upload Video</a>
+    <p id="fileName" class="text-sm text-green-400 mt-2 italic"></p>
+  </section>
+
+  <main class="max-w-10xl mx-auto px-4 grid md:grid-cols-6 gap-6 pb-12">
+
+    <div class="panel md:col-span-4 text-center">
+      <h3 class="mb-4">Live Camera Feed</h3>
+      <video id="cameraStream" autoplay playsinline muted class="mx-auto rounded-lg border border-gray-700 w-full max-w-md"></video>
+      <div class="mt-4 space-x-4">
+        <button id="startButton" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Start Recording</button>
+        <button id="stopButton" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" disabled>Stop Recording</button>
+      </div>
+    </div>
+
+    <div class="panel md:col-span-2" id="evaluationContainer">
+      <h3>Evaluation</h3>
+      <div id="evaluationTabs" class="flex space-x-2 mb-4"></div>
+      <p id="evaluationResult">Upload a video to begin analysis.</p>
+      <div class="evaluation-loader-wrapper">
+        <div id="evaluationSpinner" class="loader hidden"></div>
+      </div>
+    </div>
+
+    <div class="md:col-span-4 md:col-start-2 panel">
+      <div class="flex justify-between items-center">
+        <h3>Transcript</h3>
+        <button id="toggleButton" onclick="toggleTranscript()">Show Transcript</button>
+      </div>
+      <div id="transcriptContainer" class="hidden">
+        <p id="transcriptResult">Upload a video to begin transcription.</p>
+        <p id="ellipsis">. . .</p>
+        <div class="transcript-loader-wrapper">
+          <div id="loadSpinner" class="loader hidden"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t py-4 text-center text-sm" style="border-color: #2a2a2a; color: #888888;">
+    &copy; 2025 JagCoach — Built by Musong, Reyden, Jesus, Caleb, & Redhouse.
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/live_script.js') }}"></script>
+</body>
+</html>
