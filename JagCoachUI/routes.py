@@ -2,13 +2,11 @@ from flask import Blueprint, render_template, request, current_app, jsonify, red
 import os
 from JagCoachUI.services.JagCoachFileAnalysis import process_video, get_elements, get_feedback
 from JagCoachUI.services.FaceAnalysis import analyze_face
-#from JagCoachUI.services.LLM import evaluate_speech
 from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from firebase_admin import auth as firebase_auth
 from firebase.firebase_utils import retrieve_evals, upload_video_to_firebase, save_transcript, save_eval, retrieve_eval, get_next_filename, delete_upload
-import time
 
 processed_audio_path = ""
 filler_ratio = 0.0
@@ -115,6 +113,7 @@ def transcribe():
 
         print("Transcription complete bossman")
         save_transcript(user_email, transcription_text, next_filename)
+        session["transcript"] = transcription_text
         return jsonify({"transcription": transcription_text})
     except Exception as e:
         print(f"Error processing audio file: {e}")
@@ -140,7 +139,7 @@ def evaluate():
             elements = voice_analysis_future.result()
 
         student_results = get_feedback(emotion_ratio, eye_contact_ratio, elements, filler_ratio)
-
+        session["evaluation"] = student_results
 
         save_eval(user_email, student_results, next_filename)
         return jsonify({"evaluation": student_results})
@@ -254,3 +253,9 @@ def add_header(response):
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
     return response
+
+@main_bp.route("/upload-rubric", methods=["GET"])
+def upload_rubric():
+    transcript = session.get("transcript", "")
+    student_results = session.get("evaluation", "")
+    return render_template("rubric.html", transcript=transcript, student_results=student_results)
