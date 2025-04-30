@@ -20,17 +20,16 @@
   </header>
 
   <section class="max-w-3xl mx-auto text-center px-4 py-12">
-    <h2>AI Coaching for Oral Presentations</h2>
+    <h2>AI Coaching for Presentations</h2>
     <p style="color: #cccccc; margin-top: 0.5rem;">Upload your MP4 file to begin evaluation.</p>
     <label for="fileInput" class="button mt-6 inline-block">Upload Video</label>
     <input type="file" id="fileInput" class="hidden" accept="video/mp4" />
+    <a href="/present-live" class="button mt-6 inline-block">Present Live</a>
     <p id="fileName" class="text-sm text-green-400 mt-2 italic"></p>
   </section>
 
   <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-6 pb-12">
 
-    <!-- This is the Video Preview. Just shows the uploaded video. Was thinking of somehow adding a thumbnail to it
-    form the video the user uploads. -->
     <div class="panel">
       <h3>Video Preview</h3>
       <video id="vPlayback" controls>
@@ -39,7 +38,6 @@
       </video>
     </div>
 
-    <!-- The Evaluation Portion. Holds the output of the evaluation. -->
     <div class="panel" id="evaluationContainer">
       <h3>Evaluation</h3>
       <p id="evaluationResult">Upload a video to begin analysis.</p>
@@ -48,7 +46,6 @@
       </div>
     </div>
 
-    <!-- The Transcript Portion. Holds the container to show the transcript. -->
     <div class="md:col-span-2 panel">
       <div class="flex justify-between items-center">
         <h3>Transcript</h3>
