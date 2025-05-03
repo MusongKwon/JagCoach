@@ -6,7 +6,7 @@ from JagCoachUI.services.WhisperCall import get_transcript
 from JagCoachUI.services.FillerWords import get_filler_word_ratio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from firebase_admin import auth as firebase_auth
-from firebase.firebase_utils import retrieve_evals, upload_video_to_firebase, save_transcript, save_eval, retrieve_eval, get_next_filename, delete_upload
+from firebase.firebase_utils import retrieve_evals, upload_video_to_firebase, save_transcript, get_user_profile, save_eval, retrieve_eval, get_next_filename, delete_upload
 
 processed_audio_path = ""
 filler_ratio = 0.0
