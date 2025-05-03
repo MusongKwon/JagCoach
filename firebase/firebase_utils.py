@@ -173,3 +173,17 @@ def delete_upload(user_email, filename):
     except Exception as e:
         print(f"Error deleting upload: {e}")
         return False
+
+def get_user_profile(user_email):
+    db = firestore.client()
+    user_doc = db.collection("users").document(user_email).get()
+    user_data = user_doc.to_dict() if user_doc.exists else {}
+
+    username = user_data.get("username", user_email.split("@")[0])
+    photo_url = user_data.get("photoURL", None)
+
+    return {
+        "username": username,
+        "photo_url": photo_url
+    }
+
