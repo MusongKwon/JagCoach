@@ -130,10 +130,6 @@ def evaluate():
 
         if future:
             emotion_ratio, eye_contact_ratio = future.result()
-        print("face analysis complete")
-
-        if future:
-            emotion_ratio, eye_contact_ratio = future.result()
 
         if voice_analysis_future:
             elements = voice_analysis_future.result()
