@@ -64,11 +64,13 @@ Alternatively, you can run the following Linux command to download the LLM:
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+The following package versions were selected to maintain compatibility across the application
 ```sh
-pip install firebase_admin
-pip install tensorboard
-pip install tensorflow
-pip install dlib
+pip install tensorflow==2.19
+pip install tensorboard==2.19
+pip install protobuf==4.25.3
+pip install mediapipe==0.10.21
+pip install ml-dtypes==0.3.1
 
 ```
 Once these dependencies are installed, you can download JagCoach from the GitHub Repository (https://github.com/MusongKwon/JagCoach) and run it in an IDE or use the commands below:
