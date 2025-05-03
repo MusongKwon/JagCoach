@@ -1,0 +1,15 @@
+Flask==2.2.3
+firebase-admin==6.0.0
+google-cloud-firestore==2.20.2
+google-cloud-storage==2.0.0
+google-auth==2.39.0
+protobuf==4.25.3
+tensorflow==2.19.0
+tensorboard==2.19.0
+mediapipe==0.10.21
+ml-dtypes==0.5.1
+numpy==1.26.4
+opencv-python==4.11.0.86
+flask-cors==5.0.1
+python-dotenv==1.1.0
+gunicorn==23.0.0
