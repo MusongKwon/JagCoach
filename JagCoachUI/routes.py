@@ -153,7 +153,8 @@ def profile():
     try:
         decoded_token = firebase_auth.verify_id_token(id_token)
         user_email = decoded_token.get("email")
-        username = user_email.split("@")[0]
+
+        user_profile = get_user_profile(user_email)
 
         print("Loading profile for user:", user_email)
 
@@ -174,7 +175,7 @@ def profile():
 
         return render_template(
             "profile.html",
-            user={"username": username, "email": user_email},
+            user={"username": user_profile["username"], "email": user_email, "photo_url": user_profile["photo_url"]},
             history=history
         )
     except Exception as e:
