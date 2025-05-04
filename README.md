@@ -64,6 +64,10 @@ Alternatively, you can run the following Linux command to download the LLM:
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+For the backend, Firebase was used as the database platform to store user information. To interact with it, you'll need to install the firebase-admin package.
+```sh
+pip install firebase_admin
+```
 The following package versions were selected to maintain compatibility across the application
 ```sh
 pip install tensorflow==2.19
